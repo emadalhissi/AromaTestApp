@@ -4,8 +4,8 @@ import 'package:aroma_test_app/screens/bnb_screens/categories_screen.dart';
 import 'package:aroma_test_app/screens/bnb_screens/favorites_screen.dart';
 import 'package:aroma_test_app/screens/bnb_screens/home_screen.dart';
 import 'package:aroma_test_app/screens/bnb_screens/menu_screen.dart';
-import 'package:aroma_test_app/widgets/bnb_active_icon.dart';
-import 'package:aroma_test_app/widgets/bnb_icon.dart';
+import 'package:aroma_test_app/widgets/bn_widgets/bnb_active_icon.dart';
+import 'package:aroma_test_app/widgets/bn_widgets/bnb_icon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

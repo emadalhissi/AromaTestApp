@@ -34,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
         flexibleSpace: Stack(
           children: [
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.centerRight,
                   end: Alignment.centerLeft,

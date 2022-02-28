@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LaunchScreen extends StatefulWidget {
   const LaunchScreen({Key? key}) : super(key: key);
@@ -11,15 +12,15 @@ class _LaunchScreenState extends State<LaunchScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/main_screen');
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacementNamed(context, '/intro_screen');
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffB9272D),
+      backgroundColor: const Color(0xffB9272D),
       body: Stack(
         children: [
           Positioned(
@@ -45,17 +46,12 @@ class _LaunchScreenState extends State<LaunchScreen> {
           Container(
             width: MediaQuery.of(context).size.width,
             height: double.infinity,
-            color: Color(0xff73970810), // opacity added with (73) => 45%
-            // decoration: BoxDecoration(),
-            // child: Image.asset('images/A1.png'),
+            color: const Color(0xff970810).withOpacity(0.50),
           ),
-          Container(
-            // height: 76,
-            // width: 204,
-            alignment: Alignment.center,
-            child: Image.asset(
-              'images/launch_logo.png',
-              fit: BoxFit.cover,
+          const Center(
+            child: Image(
+              image: AssetImage('images/aroma_logo_.png'),
+              height: 80,
             ),
           ),
         ],

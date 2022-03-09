@@ -41,7 +41,6 @@ class _IntroScreenState extends State<IntroScreen> {
                 _index = index;
               });
             },
-            // physics: const NeverScrollableScrollPhysics(),
             controller: pageController,
             children: [
               IntroPage(

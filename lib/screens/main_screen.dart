@@ -8,6 +8,7 @@ import 'package:aroma_test_app/widgets/bn_widgets/bnb_active_icon.dart';
 import 'package:aroma_test_app/widgets/bn_widgets/bnb_icon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:badges/badges.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
+  int _currentIndex = 2;
   final List<BnbModel> _bnbModel = <BnbModel>[
     BnbModel(title: 'Cart', widget: CartScreen()),
     BnbModel(title: 'Categories', widget: CategoriesScreen()),
@@ -31,6 +32,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        toolbarHeight: 60,
         flexibleSpace: Stack(
           children: [
             Container(
@@ -45,7 +47,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
             ),
-            Positioned(
+            const Positioned(
               left: 82,
               top: 25,
               child: Image(
@@ -54,7 +56,7 @@ class _MainScreenState extends State<MainScreen> {
                 width: 90,
               ),
             ),
-            Positioned(
+            const Positioned(
               left: 140,
               top: -8,
               child: Image(
@@ -65,21 +67,16 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
         ),
-        title: const Image(
-          image: AssetImage('images/appbar_logo.png'),
-          width: 69,
-          height: 24,
-        ),
+        title: const Image(image: AssetImage('images/aroma_logo_white.png')),
         centerTitle: true,
-        // backgroundColor: const Color(0xffBB0D16),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.call, size: 20),
+            icon: const Image(image: AssetImage('images/support.png'),)
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.notifications_none_sharp, size: 20),
+            icon: const Icon(Icons.notifications_outlined, size: 25),
           ),
           const SizedBox(width: 5)
         ],
@@ -89,50 +86,150 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       body: _bnbModel[_currentIndex].widget,
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (int value) {
-          setState(() {
-            _currentIndex = value;
-          });
-        },
-        currentIndex: _currentIndex,
-        showUnselectedLabels: false,
-        showSelectedLabels: false,
-        // unselectedItemColor: Colors.blue,
-        backgroundColor: Colors.white,
-        elevation: 50,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: BnbIcon(bnbIcon: Icons.shopping_cart_rounded),
-            label: '',
-            activeIcon:
-                BnbActiveIcon(bnbActiveIcon: Icons.shopping_cart_rounded),
-          ),
-          BottomNavigationBarItem(
-            icon: BnbIcon(bnbIcon: Icons.widgets_rounded),
-            label: '',
-            activeIcon: BnbActiveIcon(bnbActiveIcon: Icons.widgets_rounded),
-          ),
-          BottomNavigationBarItem(
-            icon: BnbIcon(bnbIcon: Icons.home),
-            label: '',
-            activeIcon:
-                BnbActiveIcon(bnbActiveIcon: Icons.home),
-          ),
-          BottomNavigationBarItem(
-            icon: BnbIcon(bnbIcon: Icons.favorite),
-            label: '',
-            activeIcon:
-                BnbActiveIcon(bnbActiveIcon: Icons.favorite),
-          ),
-          BottomNavigationBarItem(
-            icon: BnbIcon(bnbIcon: Icons.menu),
-            label: '',
-            activeIcon:
-                BnbActiveIcon(bnbActiveIcon: Icons.menu),
-          ),
-        ],
+      bottomNavigationBar: Container(
+        // height: 65,
+        margin: EdgeInsets.zero,
+        padding: EdgeInsets.zero,
+        width: MediaQuery.of(context).size.width,
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (newIndex) {
+            setState(() {
+              _currentIndex = newIndex;
+            });
+          },
+          showUnselectedLabels: false,
+          showSelectedLabels: false,
+          selectedFontSize: 5,
+          unselectedFontSize: 5,
+          backgroundColor: Colors.white,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+              icon: Badge(
+                position: BadgePosition.topStart(),
+                animationType: BadgeAnimationType.scale,
+                badgeContent: Text('1'),
+                child: const Icon(
+                  Icons.shopping_cart,
+                  size: 27,
+                  color: Color(0xff7B7B81),
+                ),
+              ),
+              label: '',
+              activeIcon: Container(
+                height: 55,
+                width: 55,
+                child: const Icon(
+                  Icons.shopping_cart,
+                  size: 27,
+                  color: Colors.white,
+                ),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('images/active_icon_bnb.png'),
+                  ),
+                ),
+              ),
+            ),
+            BottomNavigationBarItem(
+              icon: const Image(
+                image: AssetImage('images/categories_icon_bnb.png'),
+                width: 25,
+                height: 20,
+              ),
+              label: '',
+              activeIcon: Container(
+                height: 55,
+                width: 55,
+                child: const Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Image(
+                    image: AssetImage('images/categories_icon_bnb.png'),
+                    width: 22,
+                    height: 15,
+                    color: Colors.white,
+                  ),
+                ),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('images/active_icon_bnb.png'),
+                  ),
+                ),
+              ),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.home,
+                size: 27,
+                color: Color(0xff7B7B81),
+              ),
+              label: '',
+              activeIcon: Container(
+                height: 55,
+                width: 55,
+                child: const Icon(
+                  Icons.home,
+                  size: 27,
+                  color: Colors.white,
+                ),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('images/active_icon_bnb.png'),
+                  ),
+                ),
+              ),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.favorite,
+                size: 25,
+                color: Color(0xff7B7B81),
+              ),
+              label: '',
+              activeIcon: Container(
+                height: 55,
+                width: 55,
+                child: const Icon(
+                  Icons.favorite,
+                  size: 25,
+                  color: Colors.white,
+                ),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('images/active_icon_bnb.png'),
+                  ),
+                ),
+              ),
+            ),
+            BottomNavigationBarItem(
+              icon: const Image(
+                image: AssetImage('images/menu_icon_bnb.png'),
+                width: 22,
+                height: 15,
+              ),
+              label: '',
+              activeIcon: Container(
+                height: 55,
+                width: 55,
+                child: const Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Image(
+                    image: AssetImage('images/menu_icon_bnb.png'),
+                    width: 22,
+                    height: 15,
+                    color: Colors.white,
+                  ),
+                ),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('images/active_icon_bnb.png'),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

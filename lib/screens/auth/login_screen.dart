@@ -72,8 +72,9 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
             padding: const EdgeInsets.all(30),
             child: Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 100),
                   const Image(image: AssetImage('images/aromalogow.png')),
                   const SizedBox(height: 85),
                   RichText(

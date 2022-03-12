@@ -6,7 +6,7 @@ class HomeProduct {
   late String? title;
   late String? subTitle;
   late String? description;
-  late double? price;
+  late num? price;
   late bool? isFav;
   late bool? isRate;
   late String? rateAvg;
@@ -14,7 +14,7 @@ class HomeProduct {
   late int? remainingQty;
   late bool? hasOption;
   late String? optionName;
-  late double? optionPrice;
+  late num? optionPrice;
   late List<HomeImage>? images;
   late int? isShipping;
 

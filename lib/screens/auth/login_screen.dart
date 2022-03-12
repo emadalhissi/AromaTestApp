@@ -225,9 +225,11 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                               fillColor: Colors.white,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22),
+                                borderSide: const BorderSide(color: Colors.transparent),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22),
+                                borderSide: const BorderSide(color: Colors.transparent),
                               ),
                             ),
                           )
@@ -249,9 +251,11 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                               fillColor: Colors.white,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22),
+                                borderSide: const BorderSide(color: Colors.transparent),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22),
+                                borderSide: const BorderSide(color: Colors.transparent),
                               ),
                             ),
                           ),
@@ -278,9 +282,11 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                             fillColor: Colors.white,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(22),
+                              borderSide: const BorderSide(color: Colors.transparent),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(22),
+                              borderSide: const BorderSide(color: Colors.transparent),
                             ),
                           ),
                         )
@@ -471,6 +477,8 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
     if (activateBase != null) {
       SharedPreferencesController()
           .setToken(token: activateBase.activateData!.token!);
+          SharedPreferencesController()
+          .saveLoggedIn();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

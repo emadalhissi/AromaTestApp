@@ -13,23 +13,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   List<HomeSlider> homeSliderList = <HomeSlider>[];
   late Future<List<HomeSlider>> futureHomeSliderList;
 
   List<HomeCategory> homeCategoryList = <HomeCategory>[];
   late Future<List<HomeCategory>> futureHomeCategoryList;
 
+  int selectedCategory = 0;
+
   @override
   void initState() {
     super.initState();
     futureHomeSliderList = HomeResponseController().showHomeSlider(context);
-    futureHomeCategoryList = HomeResponseController().showHomeCategories(context);
+    futureHomeCategoryList =
+        HomeResponseController().showHomeCategories(context);
   }
 
-  List<String> sliderImages = <String>[
-    'images/slider.png',
-  ];
+  // List<String> sliderImages = <String>[
+  //   'images/slider.png',
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () {},
-              icon: const Image(image: AssetImage('images/support.png'),)
-          ),
+              icon: const Image(
+                image: AssetImage('images/support.png'),
+              )),
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.notifications_outlined, size: 25),
@@ -93,177 +96,269 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              FutureBuilder(
+              FutureBuilder<List<HomeSlider>>(
+                future: futureHomeSliderList,
                 builder: (context, snapshot) {
-                  return CarouselSlider(
-                    options: CarouselOptions(
-                      autoPlay: true,
-                      height: 140,
-                      viewportFraction: 1,
-                    ),
-                    items: sliderImages.map((image) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                            child: Container(
-                              width: double.infinity,
-                              height: 140,
-                              // margin: const EdgeInsets.symmetric(horizontal: 8),
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(8),
-                                image: const DecorationImage(
-                                  image: AssetImage('images/slider.png'),
-                                  fit: BoxFit.cover,
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    homeSliderList = snapshot.data!;
+                    return CarouselSlider(
+                      options: CarouselOptions(
+                        autoPlay: true,
+                        height: 140,
+                        viewportFraction: 1,
+                      ),
+                      items: homeSliderList.map((slider) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                              child: Container(
+                                width: double.infinity,
+                                height: 140,
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(8),
+                                  image: DecorationImage(
+                                    image: NetworkImage(slider.image!),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    }).toList(),
-                  );
+                            );
+                          },
+                        );
+                      }).toList(),
+                    );
+                  } else {
+                    return Center(
+                      child: Column(
+                        children: const [
+                          Text('NO DATA'),
+                          SizedBox(height: 20),
+                          Icon(
+                            Icons.warning,
+                            color: Colors.grey,
+                            size: 80,
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 },
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: const Color(0xff484848).withOpacity(0.55),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'باقات',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: const Color(0xff484848).withOpacity(0.55),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'أجهزة',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Color(0xffD6111E),
-                            Color(0xff970810),
+              FutureBuilder<List<HomeCategory>>(
+                future: futureHomeCategoryList,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    homeCategoryList = snapshot.data!;
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    selectedCategory = 0;
+                                  });
+                                },
+                                child: Container(
+                                  height: 40,
+                                  decoration: selectedCategory == 0
+                                      ? BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Color(0xffD6111E),
+                                              Color(0xff970810),
+                                            ],
+                                          ),
+                                        )
+                                      : BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color: const Color(0xff484848)
+                                              .withOpacity(0.55),
+                                        ),
+                                  child: Center(
+                                    child: Text(
+                                      homeCategoryList[0].title!,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    selectedCategory = 1;
+                                  });
+                                },
+                                child: Container(
+                                  height: 40,
+                                  decoration: selectedCategory == 1
+                                      ? BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Color(0xffD6111E),
+                                              Color(0xff970810),
+                                            ],
+                                          ),
+                                        )
+                                      : BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color: const Color(0xff484848)
+                                              .withOpacity(0.55),
+                                        ),
+                                  child: Center(
+                                    child: Text(
+                                      homeCategoryList[1].title!,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    selectedCategory = 2;
+                                  });
+                                },
+                                child: Container(
+                                  height: 40,
+                                  decoration: selectedCategory == 2
+                                      ? BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Color(0xffD6111E),
+                                              Color(0xff970810),
+                                            ],
+                                          ),
+                                        )
+                                      : BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color: const Color(0xff484848)
+                                              .withOpacity(0.55),
+                                        ),
+                                  child: Center(
+                                    child: Text(
+                                      homeCategoryList[2].title!,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'تطبيقات',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            const Image(
+                              image: AssetImage('images/red_label.png'),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              homeCategoryList[selectedCategory].title!,
+                              style: const TextStyle(
+                                color: Color(0xff171717),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Spacer(),
+                            InkWell(
+                              onTap: () {},
+                              child: const Text(
+                                'عرض الكل',
+                                style: TextStyle(
+                                  color: Color(0xff8C8C8C),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
+                        const SizedBox(height: 20),
+                        // GridView.builder(
+                        //   shrinkWrap: true,
+                        //   padding: EdgeInsets.zero,
+                        //   physics: const NeverScrollableScrollPhysics(),
+                        //   gridDelegate:
+                        //       SliverGridDelegateWithFixedCrossAxisCount(
+                        //     crossAxisCount: 2,
+                        //     childAspectRatio: 160 / 270,
+                        //     crossAxisSpacing: 16,
+                        //     mainAxisSpacing: 16,
+                        //   ),
+                        //   itemBuilder: (context, index) {
+                        //     return HomePageGridViewItem(
+                        //       image: 'images/app1.png',
+                        //       name: 'Smart IPTV',
+                        //       info: 'شراء التطبيق مدى الحياة',
+                        //       price: '35',
+                        //     );
+                        //   },
+                        // ),
+                      ],
+                    );
+                  } else {
+                    return Center(
+                      child: Column(
+                        children: const [
+                          Text('NO DATA'),
+                          SizedBox(height: 20),
+                          Icon(
+                            Icons.warning,
+                            color: Colors.grey,
+                            size: 80,
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Row(
-                children: [
-                  const Image(
-                    image: AssetImage('images/red_label.png'),
-                  ),
-                  const SizedBox(width: 4),
-                  const Text(
-                    'تطبيقات أروما',
-                    style: TextStyle(
-                      color: Color(0xff171717),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    onTap: () {},
-                    child: const Text(
-                      'عرض الكل',
-                      style: TextStyle(
-                        color: Color(0xff8C8C8C),
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              GridView(
-                shrinkWrap: true,
-                padding: EdgeInsets.zero,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 160 / 270,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                children: const [
-                  HomePageGridViewItem(
-                    image: 'images/app1.png',
-                    name: 'Smart IPTV',
-                    info: 'شراء التطبيق مدى الحياة',
-                    price: '35',
-                  ),
-                  HomePageGridViewItem(
-                    image: 'images/app2.png',
-                    name: 'ibo player',
-                    info: 'شراء التطبيق لمدة سنة',
-                    price: '20',
-                  ),
-                  HomePageGridViewItem(
-                    image: 'images/app2.png',
-                    name: 'ibo player',
-                    info: 'شراء التطبيق لمدة سنة',
-                    price: '20',
-                  ),
-                  HomePageGridViewItem(
-                    image: 'images/app1.png',
-                    name: 'Smart IPTV',
-                    info: 'شراء التطبيق مدى الحياة',
-                    price: '35',
-                  ),
-                ],
+                    );
+                  }
+                },
               ),
             ],
           ),

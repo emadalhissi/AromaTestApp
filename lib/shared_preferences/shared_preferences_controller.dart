@@ -38,6 +38,12 @@ class SharedPreferencesController {
 
   String get checkLanguage => _sharedPrefLibObj.getString(SPKeys.language.toString()) ?? 'ar';
 
+  Future<void> setToken({required String token}) async {
+    await _sharedPrefLibObj.setString(SPKeys.token.toString(), 'Bearer ' + token);
+  }
+
+  String get getToken => _sharedPrefLibObj.getString(SPKeys.token.toString()) ?? '';
+
   Future<void> setFirstVisit() async {
     await _sharedPrefLibObj.setBool(SPKeys.firstVisit.toString(), false);
   }

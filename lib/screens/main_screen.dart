@@ -4,9 +4,6 @@ import 'package:aroma_test_app/screens/bnb_screens/categories_screen.dart';
 import 'package:aroma_test_app/screens/bnb_screens/favorites_screen.dart';
 import 'package:aroma_test_app/screens/bnb_screens/home_screen.dart';
 import 'package:aroma_test_app/screens/bnb_screens/menu_screen.dart';
-import 'package:aroma_test_app/widgets/bn_widgets/bnb_active_icon.dart';
-import 'package:aroma_test_app/widgets/bn_widgets/bnb_icon.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 
@@ -20,71 +17,17 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 2;
   final List<BnbModel> _bnbModel = <BnbModel>[
-    BnbModel(title: 'Cart', widget: CartScreen()),
-    BnbModel(title: 'Categories', widget: CategoriesScreen()),
-    BnbModel(title: 'Home', widget: HomeScreen()),
-    BnbModel(title: 'Favorites', widget: FavoritesScreen()),
-    BnbModel(title: 'Menu', widget: MenuScreen()),
+    BnbModel(title: 'Cart', widget: const CartScreen()),
+    BnbModel(title: 'Categories', widget: const CategoriesScreen()),
+    BnbModel(title: 'Home', widget: const HomeScreen()),
+    BnbModel(title: 'Favorites', widget: const FavoritesScreen()),
+    BnbModel(title: 'Menu', widget: const MenuScreen()),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        toolbarHeight: 60,
-        flexibleSpace: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerRight,
-                  end: Alignment.centerLeft,
-                  colors: [
-                    Color(0xff970810),
-                    Color(0xffBB0D16),
-                  ],
-                ),
-              ),
-            ),
-            const Positioned(
-              left: 82,
-              top: 25,
-              child: Image(
-                image: AssetImage('images/a_c_1.png'),
-                height: 90,
-                width: 90,
-              ),
-            ),
-            const Positioned(
-              left: 140,
-              top: -8,
-              child: Image(
-                image: AssetImage('images/a_c_2.png'),
-                height: 90,
-                width: 90,
-              ),
-            ),
-          ],
-        ),
-        title: const Image(image: AssetImage('images/aroma_logo_white.png')),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Image(image: AssetImage('images/support.png'),)
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_outlined, size: 25),
-          ),
-          const SizedBox(width: 5)
-        ],
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.search, size: 30),
-        ),
-      ),
       body: _bnbModel[_currentIndex].widget,
       bottomNavigationBar: Container(
         // height: 65,
@@ -109,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
               icon: Badge(
                 position: BadgePosition.topStart(),
                 animationType: BadgeAnimationType.scale,
-                badgeContent: Text('1'),
+                badgeContent: const Text('1'),
                 child: const Icon(
                   Icons.shopping_cart,
                   size: 27,
@@ -143,7 +86,7 @@ class _MainScreenState extends State<MainScreen> {
                 height: 55,
                 width: 55,
                 child: const Padding(
-                  padding: const EdgeInsets.all(15),
+                  padding: EdgeInsets.all(15),
                   child: Image(
                     image: AssetImage('images/categories_icon_bnb.png'),
                     width: 22,

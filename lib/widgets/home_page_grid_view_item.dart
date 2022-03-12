@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class HomePageGridViewItem extends StatelessWidget {
   final String image;
   final String name;
-  final String description;
+  final String info;
   final String price;
   const HomePageGridViewItem({
     required this.image,
     required this.name,
-    required this.description,
+    required this.info,
     required this.price,
     Key? key,
   }) : super(key: key);
@@ -65,7 +65,7 @@ class HomePageGridViewItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      description,
+                      info,
                       style: const TextStyle(
                         color: Color(0xff8C8C8C),
                         fontWeight: FontWeight.normal,
@@ -85,7 +85,7 @@ class HomePageGridViewItem extends StatelessWidget {
                         ),
                         const SizedBox(width: 2),
                         const Text(
-                          'رس',
+                          'ر.س',
                           style: TextStyle(
                             color: Color(0xff970810),
                             fontWeight: FontWeight.bold,

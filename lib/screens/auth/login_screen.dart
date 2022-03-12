@@ -1,4 +1,11 @@
+import 'dart:math';
+
+import 'package:aroma_test_app/API/Controllers/auth_api_controller.dart';
 import 'package:aroma_test_app/Helpers/snakbar.dart';
+import 'package:aroma_test_app/models/API%20Models/Activate/activate_base.dart';
+import 'package:aroma_test_app/models/API%20Models/Register%20User/register_user.dart';
+import 'package:aroma_test_app/screens/main_screen.dart';
+import 'package:aroma_test_app/shared_preferences/shared_preferences_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -204,6 +211,7 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                             controller: mobileEditingController,
                             cursorHeight: 5,
                             showCursor: false,
+                            keyboardType: TextInputType.phone,
                             decoration: InputDecoration(
                               hintText: 'رقم الجوال',
                               hintStyle: const TextStyle(
@@ -227,6 +235,7 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                             controller: emailEditingController,
                             cursorHeight: 5,
                             showCursor: false,
+                            keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
                               hintText: 'البريد الالكتروني',
                               hintStyle: const TextStyle(
@@ -255,6 +264,7 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                           controller: otpCodeEditingController,
                           cursorHeight: 5,
                           showCursor: false,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             hintText: 'كود التحقق',
                             hintStyle: const TextStyle(
@@ -294,7 +304,8 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                               side: MaterialStateBorderSide.resolveWith(
                                   (states) =>
                                       const BorderSide(color: Colors.white)),
-                                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
                             ),
                             const SizedBox(width: 8),
                             Expanded(
@@ -337,8 +348,8 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                   const SizedBox(height: 20),
                   !sendButtonClicked
                       ? InkWell(
-                          onTap: () {
-                            performSend();
+                          onTap: () async {
+                            await performSend();
                           },
                           child: Container(
                             height: 48,
@@ -366,8 +377,8 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                           ),
                         )
                       : InkWell(
-                          onTap: () {
-                            performSend();
+                          onTap: () async {
+                            await performLogin();
                           },
                           child: Container(
                             height: 48,
@@ -419,10 +430,53 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
     );
   }
 
-  void performSend() {
+  Future<void> performSend() async {
     if (checkDataBefore()) {
-      // TODO: SEND DATA TO API
-      // sendData();
+      await sendMobile();
+      await sendEmail();
+    }
+  }
+
+  Future<void> performLogin() async {
+    if (checkDataAfter()) {
+      await checkOTP();
+    }
+  }
+
+  Future<void> sendMobile() async {
+    RegisterUser? registerUser = await AuthApiController().registerWithMobile(
+      context,
+      mobile: '+970' + mobileEditingController.text,
+    );
+    if (registerUser != null) {
+      print('OTP => ${registerUser.data!.user!.activeCode}');
+    }
+  }
+
+  Future<void> sendEmail() async {
+    RegisterUser? registerUser = await AuthApiController().registerWithEmail(
+      context,
+      email: emailEditingController.text,
+    );
+    if (registerUser != null) {
+      print('OTP => ${registerUser.data!.user!.activeCode}');
+    }
+  }
+
+  Future<void> checkOTP() async {
+    ActivateBase? activateBase = await AuthApiController().activate(
+      context,
+      code: otpCodeEditingController.text,
+    );
+    if (activateBase != null) {
+      SharedPreferencesController()
+          .setToken(token: activateBase.activateData!.token!);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainScreen(),
+        ),
+      );
     }
   }
 
@@ -448,8 +502,21 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
   }
 
   bool checkDataAfter() {
+    if (checkDataBefore() && otpCodeEditingController.text.isEmpty) {
+      showSnackBar(
+        context,
+        message: 'يرجى ادخال كود التحقق',
+        error: true,
+      );
+      return false;
+    } else if (policyChecked == false) {
+      showSnackBar(
+        context,
+        message: 'يجب الموافقة على السياسات',
+        error: true,
+      );
+      return false;
+    }
     return true;
   }
-
-  void sendData() {}
 }

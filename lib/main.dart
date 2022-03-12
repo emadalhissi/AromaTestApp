@@ -56,7 +56,7 @@ class MyMaterialApp extends StatelessWidget {
         '/main_screen': (context) => const MainScreen(),
         '/notifications_screen': (context) => const NotificationsScreen(),
       },
-      initialRoute: '/main_screen',
+      initialRoute: '/launch_screen',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: const [
         Locale('ar'),

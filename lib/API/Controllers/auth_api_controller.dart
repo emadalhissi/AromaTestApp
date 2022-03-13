@@ -73,10 +73,8 @@ class AuthApiController with ApiHelper, SnackBarHelper {
     );
 
     if (response.statusCode == 200) {
-      print(response.statusCode);
       ActivateBase? activateBase =
           ActivateBase.fromJson(jsonDecode(response.body));
-      print(activateBase.message);
       return activateBase;
     } else if (response.statusCode == 422) {
       ActivateBase? activateBase =

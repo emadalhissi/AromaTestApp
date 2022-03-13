@@ -11,4 +11,7 @@ class ApiSettings {
   static const String activate = _apiBaseUrl + 'activate?active_code=';
 
   static const String home = _apiBaseUrl + 'home';
+
+  static const String favorite = _apiBaseUrl + 'add-favorite?product_id=';
+  static const String getFavorites = _apiBaseUrl + 'favorites';
 }

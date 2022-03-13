@@ -8,17 +8,27 @@ import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  final int pageIndex;
+  final int categoryIndex;
+
+  const MainScreen({
+    Key? key,
+    this.pageIndex = 2,
+    this.categoryIndex = 0,
+  }) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 2;
-  final List<BnbModel> _bnbModel = <BnbModel>[
+  late int _currentIndex = widget.pageIndex;
+
+  late List<BnbModel> _bnbModel = <BnbModel>[
     BnbModel(title: 'Cart', widget: const CartScreen()),
-    BnbModel(title: 'Categories', widget: const CategoriesScreen()),
+    BnbModel(
+        title: 'Categories',
+        widget: CategoriesScreen(categoryIndex: widget.categoryIndex)),
     BnbModel(title: 'Home', widget: const HomeScreen()),
     BnbModel(title: 'Favorites', widget: const FavoritesScreen()),
     BnbModel(title: 'Menu', widget: const MenuScreen()),

@@ -13,7 +13,7 @@ mixin SnackBarHelper {
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 3),
         margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).size.height - 100,
+          bottom: MediaQuery.of(context).size.height - 200,
           right: 20,
           left: 20,
         ),

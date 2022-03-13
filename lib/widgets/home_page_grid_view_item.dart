@@ -1,18 +1,31 @@
+import 'package:aroma_test_app/API/Controllers/favorites_api_controller.dart';
 import 'package:flutter/material.dart';
 
-class HomePageGridViewItem extends StatelessWidget {
+class HomePageGridViewItem extends StatefulWidget {
+  final String id;
   final String image;
   final String name;
   final String info;
   final String price;
+  final String description;
+  final bool isFavorite;
+
   const HomePageGridViewItem({
+    required this.id,
     required this.image,
     required this.name,
     required this.info,
     required this.price,
+    required this.description,
+    required this.isFavorite,
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<HomePageGridViewItem> createState() => _HomePageGridViewItemState();
+}
+
+class _HomePageGridViewItemState extends State<HomePageGridViewItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,7 +48,7 @@ class HomePageGridViewItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               SizedBox(
+              SizedBox(
                 width: double.infinity,
                 height: 170,
                 child: ClipRRect(
@@ -44,7 +57,7 @@ class HomePageGridViewItem extends StatelessWidget {
                     topLeft: Radius.circular(6),
                   ),
                   child: Image(
-                    image: AssetImage(image),
+                    image: NetworkImage(widget.image),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -56,16 +69,17 @@ class HomePageGridViewItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      widget.name,
                       style: const TextStyle(
                         color: Color(0xff171717),
                         fontWeight: FontWeight.normal,
                         fontSize: 14,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      info,
+                      widget.info,
                       style: const TextStyle(
                         color: Color(0xff8C8C8C),
                         fontWeight: FontWeight.normal,
@@ -76,7 +90,7 @@ class HomePageGridViewItem extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          price,
+                          widget.price,
                           style: const TextStyle(
                             color: Color(0xff970810),
                             fontWeight: FontWeight.bold,
@@ -105,15 +119,22 @@ class HomePageGridViewItem extends StatelessWidget {
               ),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.all(10),
-            child: CircleAvatar(
-              radius: 18,
-              backgroundColor: Color(0xffC3C3C3),
-              child: Center(
-                child: Icon(
-                  Icons.favorite,
-                  color: Color(0xffD4000C),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: InkWell(
+              onTap: () async {
+                await favorite();
+              },
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: const Color(0xffC3C3C3),
+                child: Center(
+                  child: Icon(
+                    Icons.favorite,
+                    color: widget.isFavorite
+                        ? const Color(0xffD4000C)
+                        : const Color(0xffE2E2E2),
+                  ),
                 ),
               ),
             ),
@@ -121,5 +142,16 @@ class HomePageGridViewItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> favorite() async {
+    bool status = await FavoritesApiController().favorite(
+      context,
+      id: widget.id,
+    );
+
+    if (status) {
+      setState(() {});
+    }
   }
 }

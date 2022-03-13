@@ -15,10 +15,8 @@ class SplashController with ApiHelper, SnackBarHelper {
       headers: headers,
     );
 
-    if(response.statusCode == 200) {
-      print(response.statusCode);
+    if (response.statusCode == 200) {
       var splashData = SplashData.fromJson(jsonDecode(response.body)['data']);
-      print(splashData.countries![0].title);
 
       return splashData;
     }

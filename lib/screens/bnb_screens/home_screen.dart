@@ -1,6 +1,9 @@
+import 'package:aroma_test_app/API/Controllers/favorites_api_controller.dart';
 import 'package:aroma_test_app/API/Controllers/home_response_controller.dart';
 import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_category.dart';
 import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_slider.dart';
+import 'package:aroma_test_app/screens/main_screen.dart';
+import 'package:aroma_test_app/screens/product_screen.dart';
 import 'package:aroma_test_app/widgets/home_page_grid_view_item.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -28,10 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
     futureHomeCategoryList =
         HomeResponseController().showHomeCategories(context);
   }
-
-  // List<String> sliderImages = <String>[
-  //   'images/slider.png',
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -308,7 +307,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             const Spacer(),
                             InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MainScreen(
+                                      pageIndex: 1,
+                                      categoryIndex: selectedCategory,
+                                    ),
+                                  ),
+                                );
+                              },
                               child: const Text(
                                 'عرض الكل',
                                 style: TextStyle(
@@ -321,26 +330,61 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                         const SizedBox(height: 20),
-                        // GridView.builder(
-                        //   shrinkWrap: true,
-                        //   padding: EdgeInsets.zero,
-                        //   physics: const NeverScrollableScrollPhysics(),
-                        //   gridDelegate:
-                        //       SliverGridDelegateWithFixedCrossAxisCount(
-                        //     crossAxisCount: 2,
-                        //     childAspectRatio: 160 / 270,
-                        //     crossAxisSpacing: 16,
-                        //     mainAxisSpacing: 16,
-                        //   ),
-                        //   itemBuilder: (context, index) {
-                        //     return HomePageGridViewItem(
-                        //       image: 'images/app1.png',
-                        //       name: 'Smart IPTV',
-                        //       info: 'شراء التطبيق مدى الحياة',
-                        //       price: '35',
-                        //     );
-                        //   },
-                        // ),
+                        GridView.builder(
+                          itemCount: 4,
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 160 / 270,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                          ),
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductScreen(
+                                      homeProduct:
+                                          homeCategoryList[selectedCategory]
+                                              .products![index],
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: HomePageGridViewItem(
+                                id: homeCategoryList[selectedCategory]
+                                    .products![index]
+                                    .id
+                                    .toString(),
+                                image: homeCategoryList[selectedCategory]
+                                    .products![index]
+                                    .images![0]
+                                    .image!,
+                                name: homeCategoryList[selectedCategory]
+                                    .products![index]
+                                    .title!,
+                                info: homeCategoryList[selectedCategory]
+                                    .products![index]
+                                    .subTitle!,
+                                price: homeCategoryList[selectedCategory]
+                                    .products![index]
+                                    .price
+                                    .toString(),
+                                description: homeCategoryList[selectedCategory]
+                                    .products![index]
+                                    .description!,
+                                isFavorite: homeCategoryList[selectedCategory]
+                                    .products![index]
+                                    .isFav!,
+                              ),
+                            );
+                          },
+                        ),
                       ],
                     );
                   } else {

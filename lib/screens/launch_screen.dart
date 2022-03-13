@@ -1,5 +1,7 @@
 import 'package:aroma_test_app/API/Controllers/auth_api_controller.dart';
 import 'package:aroma_test_app/API/Controllers/splash_controller.dart';
+import 'package:aroma_test_app/DB/controllers/splash_cities_db_controller.dart';
+import 'package:aroma_test_app/DB/controllers/splash_countries_db_controller.dart';
 import 'package:aroma_test_app/models/API%20Models/Splash/splash_data.dart';
 import 'package:aroma_test_app/screens/intro_screen.dart';
 import 'package:aroma_test_app/shared_preferences/shared_preferences_controller.dart';
@@ -14,6 +16,11 @@ class LaunchScreen extends StatefulWidget {
 }
 
 class _LaunchScreenState extends State<LaunchScreen> {
+  final SplashCountriesDbController splashCountriesDbController =
+      SplashCountriesDbController();
+  final SplashCitiesDbController splashCitiesDbController =
+      SplashCitiesDbController();
+
   @override
   void initState() {
     super.initState();
@@ -27,21 +34,36 @@ class _LaunchScreenState extends State<LaunchScreen> {
     bool status = await AuthApiController().register(context);
 
     if (status) {
-      print('status true from register');
       await splashData();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const IntroScreen(),));
+      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const IntroScreen(),));
     } else {
       print('status not true from register');
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const IntroScreen(),));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const IntroScreen(),
+          ));
     }
   }
 
   Future<void> splashData() async {
     print('splashData inside');
     SplashData? splashData = await SplashController().getSplash(context);
-    if(splashData != null) {
-      print('splashData = >');
-      print(splashData);
+    if (splashData != null) {
+      for (int i = 0; i < splashData.countries!.length; i++) {
+        print('--==-- ${splashData.countries![i].prefix} --==--');
+        await splashCountriesDbController.create(splashData.countries![i]);
+
+        print('====++++====');
+
+        for (int j = 0; j < splashData.countries![i].cities!.length; j++) {
+          print('--==-- ${splashData.countries![i].cities![j].title} --==--');
+          // await splashCitiesDbController
+          //     .create(splashData.countries![i].cities![j]);
+        }
+      }
+
+      print('SAVE DATABASE++');
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:aroma_test_app/DB/db_provider.dart';
 import 'package:aroma_test_app/Providers/lang_provider.dart';
 import 'package:aroma_test_app/screens/auth/login_screen.dart';
 import 'package:aroma_test_app/screens/intro_screen.dart';
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferencesController().initSharedPreferences();
+  await DBProvider().initDatabase();
   runApp(const MyApp());
 }
 

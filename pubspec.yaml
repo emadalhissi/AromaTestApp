@@ -45,6 +45,7 @@ dependencies:
   badges: ^2.0.2
   http: ^0.13.4
   sqflite: ^2.0.0+4
+  path_provider: ^2.0.8
 
 
 dev_dependencies:

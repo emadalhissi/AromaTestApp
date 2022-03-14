@@ -4,6 +4,7 @@ import 'package:aroma_test_app/DB/controllers/splash_cities_db_controller.dart';
 import 'package:aroma_test_app/DB/controllers/splash_countries_db_controller.dart';
 import 'package:aroma_test_app/Providers/splash_provider.dart';
 import 'package:aroma_test_app/models/API%20Models/Splash/splash_data.dart';
+import 'package:aroma_test_app/screens/auth/login_screen.dart';
 import 'package:aroma_test_app/screens/intro_screen.dart';
 import 'package:aroma_test_app/shared_preferences/shared_preferences_controller.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,13 @@ class _LaunchScreenState extends State<LaunchScreen> {
 
     if (status) {
       await splashData();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const IntroScreen(),));
+      if (SharedPreferencesController().checkFirstVisit == true) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const IntroScreen()));
+      } else {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()));
+      }
     } else {
       print('status not true from register');
       Navigator.pushReplacement(
@@ -54,27 +61,32 @@ class _LaunchScreenState extends State<LaunchScreen> {
     var countries = await SplashController().getSplashCountries(context);
     if (countries.isNotEmpty) {
       print('countries.isNotEmpty');
-      Provider.of<SplashProvider>(context, listen: false).setCountriesList_(list: countries);
+      Provider.of<SplashProvider>(context, listen: false)
+          .setCountriesList_(list: countries);
     }
     var countryCodes = await SplashController().getSplashCountryCodes(context);
     if (countryCodes.isNotEmpty) {
       print('countryCodes.isNotEmpty');
-      Provider.of<SplashProvider>(context, listen: false).setCountryCodesList_(list: countryCodes);
+      Provider.of<SplashProvider>(context, listen: false)
+          .setCountryCodesList_(list: countryCodes);
     }
     var currencies = await SplashController().getSplashCurrencies(context);
     if (currencies.isNotEmpty) {
       print('currencies.isNotEmpty');
-      Provider.of<SplashProvider>(context, listen: false).setCurrenciesList_(list: currencies);
+      Provider.of<SplashProvider>(context, listen: false)
+          .setCurrenciesList_(list: currencies);
     }
     var socialMedia = await SplashController().getSplashSocialMedia(context);
     if (socialMedia.isNotEmpty) {
       print('socialMedia.isNotEmpty');
-      Provider.of<SplashProvider>(context, listen: false).setSocialMediaList_(list: socialMedia);
+      Provider.of<SplashProvider>(context, listen: false)
+          .setSocialMediaList_(list: socialMedia);
     }
     var pages = await SplashController().getSplashPages(context);
     if (pages.isNotEmpty) {
       print('pages.isNotEmpty');
-      Provider.of<SplashProvider>(context, listen: false).setPagesList_(list: pages);
+      Provider.of<SplashProvider>(context, listen: false)
+          .setPagesList_(list: pages);
     }
     print('END SPLASH');
   }

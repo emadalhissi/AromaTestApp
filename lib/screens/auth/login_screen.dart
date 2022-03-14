@@ -13,6 +13,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 import 'package:intl_phone_field/countries.dart' as phone_countries;
+import 'package:sms_autofill/sms_autofill.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -21,33 +22,62 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
+class _LoginScreenState extends State<LoginScreen>
+    with SnackBarHelper, CodeAutoFill {
   late TextEditingController mobileEditingController;
   late TextEditingController emailEditingController;
   late TextEditingController otpCodeEditingController;
+  late TextEditingController searchEditingController;
 
   String loginWith = 'mobile';
   bool sendButtonClicked = false;
   bool policyChecked = false;
-  late String dropdownButtonValue =
-      Provider.of<SplashProvider>(context, listen: false)
-          .countryCodes_[0]
-          .prefix!;
+  // String code = '';
 
+  phone_countries.Country selectedCountry = phone_countries.countries
+      .firstWhere((element) => element.dialCode == '970');
+  bool showCountriesList = false;
+  List<phone_countries.Country> searchedCountries = <phone_countries.Country>[];
 
   @override
   void initState() {
+    listenForCode();
+    SmsAutoFill().getAppSignature.then((signature) {
+      setState(() {
+        final appSignature = signature;
+        print('appSignature ===> $appSignature');
+      });
+    });
     super.initState();
     mobileEditingController = TextEditingController();
     emailEditingController = TextEditingController();
     otpCodeEditingController = TextEditingController();
+    searchEditingController = TextEditingController();
+    // _listenOtp();
   }
+
+  @override
+  void codeUpdated() {
+    // TODO: implement codeUpdated
+    setState(() {
+      otpCodeEditingController.text = code!;
+    });
+    // verifyOtp(code);
+  }
+  // void _listenOtp() async {
+  //   print('inside _listenOtp, before');
+  //   await SmsAutoFill().listenForCode();
+  //   print('inside _listenOtp, after');
+
+  // }
 
   @override
   void dispose() {
     mobileEditingController.dispose();
     emailEditingController.dispose();
     otpCodeEditingController.dispose();
+    searchEditingController.dispose();
+    SmsAutoFill().unregisterListener();
     super.dispose();
   }
 
@@ -222,32 +252,76 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                             showCursor: false,
                             keyboardType: TextInputType.phone,
                             decoration: InputDecoration(
-                              suffixIcon: DropdownButton<String>(
-                                value: phone_countries.countries[0].dialCode,
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    dropdownButtonValue = newValue!;
-                                  });
-                                },
-                                items: phone_countries.countries
-                                    .map((country_) {
-                                  return DropdownMenuItem(
-                                    child: Row(
-                                      children: [
-                                        Image.asset(
-                                          'assets/flags/${phone_countries.countries[38].code.toLowerCase()}.png',
-                                          package: 'intl_phone_field',
-                                          width: 32,
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text(country_.dialCode),
-                                        Text('+'),
-                                      ],
-                                    ),
-                                    value: country_.dialCode,
-                                  );
-                                }).toList(),
+                              suffixIconColor: Colors.grey,
+                              suffixIcon: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: InkWell(
+                                  onTap: () {
+                                    if (showCountriesList == false) {
+                                      setState(() {
+                                        showCountriesList = true;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        showCountriesList = false;
+                                      });
+                                    }
+                                  },
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.grey,
+                                      ),
+                                      Text(selectedCountry.dialCode),
+                                      const Text('+'),
+                                      const SizedBox(width: 8),
+                                      Image.asset(
+                                        'assets/flags/${selectedCountry.code.toLowerCase()}.png',
+                                        package: 'intl_phone_field',
+                                        width: 32,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
+                              // suffixIcon: DropdownButton<String>(
+                              //   underline: const SizedBox.shrink(),
+                              //   alignment: Alignment.centerLeft,
+                              //   value: dropdownButtonDialCode,
+                              //   onChanged: (String? newValue) {
+                              //     setState(() {
+                              //       dropdownButtonDialCode = newValue!;
+                              //     });
+                              //     print(dropdownButtonDialCode);
+                              //   },
+                              //   items:
+                              //       phone_countries.countries.map((country_) {
+                              //     return DropdownMenuItem(
+                              //       onTap: (){
+                              //         setState(() {
+                              //           dropdownButtonFlag = country_.code;
+                              //         });
+                              //       },
+                              //       child: Row(
+                              //         mainAxisAlignment: MainAxisAlignment.end,
+                              //         children: [
+                              //           Text(country_.dialCode),
+                              //           const Text('+'),
+                              //           const SizedBox(width: 8),
+                              //           Image.asset(
+                              //             'assets/flags/${country_.code.toLowerCase()}.png',
+                              //             package: 'intl_phone_field',
+                              //             width: 32,
+                              //           ),
+                              //         ],
+                              //       ),
+                              //       value: country_.dialCode,
+                              //     );
+                              //   }).toList(),
+                              // ),
                               // prefixIcon: DropdownButton<String>(
                               //   value: dropdownButtonValue,
                               //   onChanged: (String? newValue) {
@@ -320,11 +394,13 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                       ? const SizedBox(height: 20)
                       : const SizedBox.shrink(),
                   sendButtonClicked
-                      ? TextField(
-                          controller: otpCodeEditingController,
-                          cursorHeight: 5,
-                          showCursor: false,
-                          keyboardType: TextInputType.number,
+                      ? TextFieldPinAutoFill(
+                          // controller: otpCodeEditingController,
+                          // cursorHeight: 5,
+                          // showCursor: false,
+                          // keyboardType: TextInputType.number,
+                          codeLength: 1,
+                          currentCode: code,
                           decoration: InputDecoration(
                             hintText: 'كود التحقق',
                             hintStyle: const TextStyle(
@@ -489,6 +565,125 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
               ),
             ),
           ),
+          showCountriesList == true
+              ? PositionedDirectional(
+                  top: 100,
+                  end: 20,
+                  child: Container(
+                    width: 200,
+                    height: MediaQuery.of(context).size.height - 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: TextField(
+                              controller: searchEditingController,
+                              onChanged: (searchText) {
+                                setState(() {
+                                  searchedCountries.clear();
+                                  for (int i = 0;
+                                      i < phone_countries.countries.length;
+                                      i++) {
+                                    if (phone_countries.countries[i].name
+                                            .toLowerCase()
+                                            .contains(
+                                                searchText.toLowerCase()) ||
+                                        phone_countries.countries[i].dialCode
+                                            .contains(
+                                                searchText.toLowerCase())) {
+                                      searchedCountries
+                                          .add(phone_countries.countries[i]);
+                                    }
+                                  }
+                                });
+                              },
+                              decoration: const InputDecoration(
+                                hintText: 'ابحث',
+                              ),
+                            ),
+                          ),
+                          ListView(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            children: searchedCountries.isNotEmpty ||
+                                    searchEditingController.text.isNotEmpty
+                                ? searchedCountries
+                                    .map(
+                                      (country_) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 15,
+                                          vertical: 5,
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              selectedCountry = country_;
+                                              showCountriesList = false;
+                                            });
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(country_.dialCode),
+                                              const Text('+'),
+                                              const SizedBox(width: 8),
+                                              Image.asset(
+                                                'assets/flags/${country_.code.toLowerCase()}.png',
+                                                package: 'intl_phone_field',
+                                                width: 32,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList()
+                                : phone_countries.countries
+                                    .map(
+                                      (country_) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 15,
+                                          vertical: 5,
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              selectedCountry = country_;
+                                              showCountriesList = false;
+                                            });
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(country_.dialCode),
+                                              const Text('+'),
+                                              const SizedBox(width: 8),
+                                              Image.asset(
+                                                'assets/flags/${country_.code.toLowerCase()}.png',
+                                                package: 'intl_phone_field',
+                                                width: 32,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
         ],
       ),
     );
@@ -508,9 +703,12 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
   }
 
   Future<void> sendMobile() async {
+    // final signature = await SmsAutoFill().getAppSignature;
+    // print('signature => $signature');
+    // await SmsAutoFill().listenForCode;
     RegisterUser? registerUser = await AuthApiController().registerWithMobile(
       context,
-      mobile: '+970' + mobileEditingController.text,
+      mobile: '+' + selectedCountry.dialCode + mobileEditingController.text,
     );
     if (registerUser != null) {
       print('OTP => ${registerUser.data!.user!.activeCode}');

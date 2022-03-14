@@ -1,5 +1,6 @@
 import 'package:aroma_test_app/Providers/lang_provider.dart';
 import 'package:aroma_test_app/main.dart';
+import 'package:aroma_test_app/shared_preferences/shared_preferences_controller.dart';
 import 'package:aroma_test_app/widgets/Intro%20Screen/intro_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -100,7 +101,7 @@ class _IntroScreenState extends State<IntroScreen> {
                     InkWell(
                       onTap: () {
                         _index == 2
-                            ? Navigator.pushReplacementNamed(context, '/login_screen')
+                            ? goToLoginScreen()
                             : pageController.nextPage(
                                 duration: const Duration(milliseconds: 500),
                                 curve: Curves.easeIn);
@@ -110,7 +111,7 @@ class _IntroScreenState extends State<IntroScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/login_screen');
+                        goToLoginScreen();
                       },
                       child: Text(
                         AppLocalizations.of(context)!.skip,
@@ -136,5 +137,10 @@ class _IntroScreenState extends State<IntroScreen> {
         ],
       ),
     );
+  }
+
+  void goToLoginScreen() {
+    Navigator.pushReplacementNamed(context, '/login_screen');
+    SharedPreferencesController().setFirstVisit();
   }
 }

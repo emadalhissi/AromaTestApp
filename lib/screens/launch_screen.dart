@@ -2,11 +2,13 @@ import 'package:aroma_test_app/API/Controllers/auth_api_controller.dart';
 import 'package:aroma_test_app/API/Controllers/splash_controller.dart';
 import 'package:aroma_test_app/DB/controllers/splash_cities_db_controller.dart';
 import 'package:aroma_test_app/DB/controllers/splash_countries_db_controller.dart';
+import 'package:aroma_test_app/Providers/splash_provider.dart';
 import 'package:aroma_test_app/models/API%20Models/Splash/splash_data.dart';
 import 'package:aroma_test_app/screens/intro_screen.dart';
 import 'package:aroma_test_app/shared_preferences/shared_preferences_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class LaunchScreen extends StatefulWidget {
   const LaunchScreen({Key? key}) : super(key: key);
@@ -35,36 +37,46 @@ class _LaunchScreenState extends State<LaunchScreen> {
 
     if (status) {
       await splashData();
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const IntroScreen(),));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const IntroScreen(),));
     } else {
       print('status not true from register');
       Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const IntroScreen(),
-          ));
+        context,
+        MaterialPageRoute(
+          builder: (context) => const IntroScreen(),
+        ),
+      );
     }
   }
 
   Future<void> splashData() async {
     print('splashData inside');
-    SplashData? splashData = await SplashController().getSplash(context);
-    if (splashData != null) {
-      for (int i = 0; i < splashData.countries!.length; i++) {
-        print('--==-- ${splashData.countries![i].prefix} --==--');
-        await splashCountriesDbController.create(splashData.countries![i]);
-
-        print('====++++====');
-
-        for (int j = 0; j < splashData.countries![i].cities!.length; j++) {
-          print('--==-- ${splashData.countries![i].cities![j].title} --==--');
-          // await splashCitiesDbController
-          //     .create(splashData.countries![i].cities![j]);
-        }
-      }
-
-      print('SAVE DATABASE++');
+    var countries = await SplashController().getSplashCountries(context);
+    if (countries.isNotEmpty) {
+      print('countries.isNotEmpty');
+      Provider.of<SplashProvider>(context, listen: false).setCountriesList_(list: countries);
     }
+    var countryCodes = await SplashController().getSplashCountryCodes(context);
+    if (countryCodes.isNotEmpty) {
+      print('countryCodes.isNotEmpty');
+      Provider.of<SplashProvider>(context, listen: false).setCountryCodesList_(list: countryCodes);
+    }
+    var currencies = await SplashController().getSplashCurrencies(context);
+    if (currencies.isNotEmpty) {
+      print('currencies.isNotEmpty');
+      Provider.of<SplashProvider>(context, listen: false).setCurrenciesList_(list: currencies);
+    }
+    var socialMedia = await SplashController().getSplashSocialMedia(context);
+    if (socialMedia.isNotEmpty) {
+      print('socialMedia.isNotEmpty');
+      Provider.of<SplashProvider>(context, listen: false).setSocialMediaList_(list: socialMedia);
+    }
+    var pages = await SplashController().getSplashPages(context);
+    if (pages.isNotEmpty) {
+      print('pages.isNotEmpty');
+      Provider.of<SplashProvider>(context, listen: false).setPagesList_(list: pages);
+    }
+    print('END SPLASH');
   }
 
   @override

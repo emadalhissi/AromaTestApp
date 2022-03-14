@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:aroma_test_app/API/Controllers/auth_api_controller.dart';
 import 'package:aroma_test_app/Helpers/snakbar.dart';
+import 'package:aroma_test_app/Providers/splash_provider.dart';
 import 'package:aroma_test_app/models/API%20Models/Activate/activate_base.dart';
 import 'package:aroma_test_app/models/API%20Models/Register%20User/register_user.dart';
 import 'package:aroma_test_app/screens/main_screen.dart';
@@ -9,6 +10,9 @@ import 'package:aroma_test_app/shared_preferences/shared_preferences_controller.
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:provider/provider.dart';
+import 'package:intl_phone_field/countries.dart' as phone_countries;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -25,6 +29,11 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
   String loginWith = 'mobile';
   bool sendButtonClicked = false;
   bool policyChecked = false;
+  late String dropdownButtonValue =
+      Provider.of<SplashProvider>(context, listen: false)
+          .countryCodes_[0]
+          .prefix!;
+
 
   @override
   void initState() {
@@ -213,6 +222,49 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                             showCursor: false,
                             keyboardType: TextInputType.phone,
                             decoration: InputDecoration(
+                              suffixIcon: DropdownButton<String>(
+                                value: phone_countries.countries[0].dialCode,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropdownButtonValue = newValue!;
+                                  });
+                                },
+                                items: phone_countries.countries
+                                    .map((country_) {
+                                  return DropdownMenuItem(
+                                    child: Row(
+                                      children: [
+                                        Image.asset(
+                                          'assets/flags/${phone_countries.countries[38].code.toLowerCase()}.png',
+                                          package: 'intl_phone_field',
+                                          width: 32,
+                                        ),
+                                        SizedBox(width: 8),
+                                        Text(country_.dialCode),
+                                        Text('+'),
+                                      ],
+                                    ),
+                                    value: country_.dialCode,
+                                  );
+                                }).toList(),
+                              ),
+                              // prefixIcon: DropdownButton<String>(
+                              //   value: dropdownButtonValue,
+                              //   onChanged: (String? newValue) {
+                              //     setState(() {
+                              //       dropdownButtonValue = newValue!;
+                              //     });
+                              //   },
+                              //   items: Provider.of<SplashProvider>(context,
+                              //           listen: false)
+                              //       .countryCodes_
+                              //       .map((countryCode) {
+                              //     return DropdownMenuItem(
+                              //       child: Text('+${countryCode.prefix!}'),
+                              //       value: countryCode.prefix,
+                              //     );
+                              //   }).toList(),
+                              // ),
                               hintText: 'رقم الجوال',
                               hintStyle: const TextStyle(
                                 color: Color(0xff8C8C8C),
@@ -225,11 +277,13 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                               fillColor: Colors.white,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22),
-                                borderSide: const BorderSide(color: Colors.transparent),
+                                borderSide:
+                                    const BorderSide(color: Colors.transparent),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22),
-                                borderSide: const BorderSide(color: Colors.transparent),
+                                borderSide:
+                                    const BorderSide(color: Colors.transparent),
                               ),
                             ),
                           )
@@ -251,11 +305,13 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                               fillColor: Colors.white,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22),
-                                borderSide: const BorderSide(color: Colors.transparent),
+                                borderSide:
+                                    const BorderSide(color: Colors.transparent),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22),
-                                borderSide: const BorderSide(color: Colors.transparent),
+                                borderSide:
+                                    const BorderSide(color: Colors.transparent),
                               ),
                             ),
                           ),
@@ -282,11 +338,13 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
                             fillColor: Colors.white,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(22),
-                              borderSide: const BorderSide(color: Colors.transparent),
+                              borderSide:
+                                  const BorderSide(color: Colors.transparent),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(22),
-                              borderSide: const BorderSide(color: Colors.transparent),
+                              borderSide:
+                                  const BorderSide(color: Colors.transparent),
                             ),
                           ),
                         )
@@ -477,8 +535,7 @@ class _LoginScreenState extends State<LoginScreen> with SnackBarHelper {
     if (activateBase != null) {
       SharedPreferencesController()
           .setToken(token: activateBase.activateData!.token!);
-          SharedPreferencesController()
-          .saveLoggedIn();
+      SharedPreferencesController().saveLoggedIn();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

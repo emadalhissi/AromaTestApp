@@ -46,6 +46,7 @@ dependencies:
   http: ^0.13.4
   sqflite: ^2.0.0+4
   path_provider: ^2.0.8
+  intl_phone_field: ^3.0.1
 
 
 dev_dependencies:

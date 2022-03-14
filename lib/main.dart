@@ -1,5 +1,6 @@
 import 'package:aroma_test_app/DB/db_provider.dart';
 import 'package:aroma_test_app/Providers/lang_provider.dart';
+import 'package:aroma_test_app/Providers/splash_provider.dart';
 import 'package:aroma_test_app/screens/auth/login_screen.dart';
 import 'package:aroma_test_app/screens/intro_screen.dart';
 import 'package:aroma_test_app/screens/launch_screen.dart';
@@ -33,6 +34,9 @@ class _MyAppState extends State<MyApp> {
         providers: [
           ChangeNotifierProvider<LangProvider>(
             create: (context) => LangProvider(),
+          ),
+          ChangeNotifierProvider<SplashProvider>(
+            create: (context) => SplashProvider(),
           ),
         ],
         child: const MyMaterialApp(),
@@ -102,4 +106,3 @@ class _RestartWidgetState extends State<RestartWidget> {
     );
   }
 }
-

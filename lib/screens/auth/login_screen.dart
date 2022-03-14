@@ -48,11 +48,13 @@ class _LoginScreenState extends State<LoginScreen>
         print('appSignature ===> $appSignature');
       });
     });
+    
     super.initState();
     mobileEditingController = TextEditingController();
     emailEditingController = TextEditingController();
     otpCodeEditingController = TextEditingController();
     searchEditingController = TextEditingController();
+    // codeUpdated();
     // _listenOtp();
   }
 
@@ -61,6 +63,8 @@ class _LoginScreenState extends State<LoginScreen>
     // TODO: implement codeUpdated
     setState(() {
       otpCodeEditingController.text = code!;
+      print('---code---');
+      print(code);
     });
     // verifyOtp(code);
   }
@@ -394,13 +398,14 @@ class _LoginScreenState extends State<LoginScreen>
                       ? const SizedBox(height: 20)
                       : const SizedBox.shrink(),
                   sendButtonClicked
-                      ? TextFieldPinAutoFill(
-                          // controller: otpCodeEditingController,
-                          // cursorHeight: 5,
-                          // showCursor: false,
-                          // keyboardType: TextInputType.number,
-                          codeLength: 1,
-                          currentCode: code,
+                      ? TextField(
+                          controller: otpCodeEditingController,
+                          cursorHeight: 5,
+                          showCursor: false,
+                          keyboardType: TextInputType.number,
+
+                          // codeLength: 1,
+                          // currentCode: code,
                           decoration: InputDecoration(
                             hintText: 'كود التحقق',
                             hintStyle: const TextStyle(

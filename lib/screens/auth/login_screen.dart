@@ -14,6 +14,8 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 import 'package:intl_phone_field/countries.dart' as phone_countries;
 import 'package:sms_autofill/sms_autofill.dart';
+// import 'package:page_transition/page_transition.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -761,6 +763,28 @@ class _LoginScreenState extends State<LoginScreen>
           builder: (context) => const MainScreen(),
         ),
       );
+      // PageRouteBuilder(
+      //                 transitionsBuilder:
+      //                     (context, animation, secondaryAnimation, child) {
+      //                   return ScaleTransition(
+      //                     alignment: Alignment.center,
+      //                     scale: Tween<double>(begin: 0.1, end: 1).animate(
+      //                       CurvedAnimation(
+      //                         parent: animation,
+      //                         curve: Curves.bounceIn,
+      //                       ),
+      //                     ),
+      //                     child: child,
+      //                   );
+      //                 },
+      //                 transitionDuration: Duration(seconds: 2),
+      //                 pageBuilder: (BuildContext context,
+      //                     Animation<double> animation,
+      //                     Animation<double> secondaryAnimation) {
+      //                   return FinalScreen();
+      //                 },
+      //               ),
+      //             );
     }
   }
 

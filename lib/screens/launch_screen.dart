@@ -18,21 +18,52 @@ class LaunchScreen extends StatefulWidget {
   _LaunchScreenState createState() => _LaunchScreenState();
 }
 
-class _LaunchScreenState extends State<LaunchScreen> {
+class _LaunchScreenState extends State<LaunchScreen> with TickerProviderStateMixin{
   final SplashCountriesDbController splashCountriesDbController =
       SplashCountriesDbController();
   final SplashCitiesDbController splashCitiesDbController =
       SplashCitiesDbController();
+late Animation animation;
+  late AnimationController animationController;
 
   @override
   void initState() {
     super.initState();
     register();
-    // Future.delayed(const Duration(seconds: 2), () {
-    //   Navigator.pushReplacementNamed(context, '/intro_screen');
-    // });
+    animationController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+      animationBehavior: AnimationBehavior.preserve,
+      lowerBound: 0.1,
+    );
+
+    // animation = Tween(begin: 0.8, end: 1.0).animate(animationController);
+    animation = Tween(begin: -1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.easeInOut,
+        reverseCurve: Curves.easeIn,
+      ),
+    );
+
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        animationController.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        animationController.forward();
+      }
+    });
+
+    animationController.forward();
   }
 
+ 
+
+ @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
   Future<void> register() async {
     bool status = await AuthApiController().register(context);
 
@@ -124,10 +155,14 @@ class _LaunchScreenState extends State<LaunchScreen> {
             height: double.infinity,
             color: const Color(0xff970810).withOpacity(0.50),
           ),
-          const Center(
-            child: Image(
-              image: AssetImage('images/aroma_logo_.png'),
-              height: 80,
+          Center(
+            child: FadeTransition(
+              opacity:
+                  animationController.drive(CurveTween(curve: Curves.easeOut)),
+              child: Image(
+                image: AssetImage('images/aroma_logo_.png'),
+                height: 80,
+              ),
             ),
           ),
         ],

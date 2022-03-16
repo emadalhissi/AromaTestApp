@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              SharedPreferencesController().getSliderDownloaded == true
+              SharedPreferencesController().getSliderDownloaded == false
                   ? FutureBuilder<List<HomeSlider>>(
                       future: futureHomeSliderList,
                       builder: (context, snapshot) {
@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 140,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -228,374 +228,61 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      height: 40,
-                                      decoration: selectedCategory == 10
-                                          ? BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(8),
-                                        gradient: const LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
+                                    Expanded(
+                                      child: Shimmer(
+                                        gradient: LinearGradient(
                                           colors: [
-                                            Color(0xffD6111E),
-                                            Color(0xff970810),
+                                            Colors.grey.shade300,
+                                            Colors.grey.shade50,
+                                            Colors.grey.shade300,
+                                            Colors.grey.shade100,
                                           ],
                                         ),
-                                      )
-                                          : BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(8),
-                                        color: const Color(0xff484848)
-                                            .withOpacity(0.55),
-                                      ),
-                                      child: const Padding(
-                                        padding:
-                                        EdgeInsets.symmetric(horizontal: 8),
-                                        child: Center(
-                                          child: Text(
-                                            'الكل',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selectedCategory = 0;
-                                          });
-                                        },
+                                        enabled: true,
                                         child: Container(
                                           height: 40,
-                                          decoration: selectedCategory == 0
-                                              ? BoxDecoration(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
                                             borderRadius:
-                                            BorderRadius.circular(8),
-                                            gradient: const LinearGradient(
-                                              begin: Alignment.topCenter,
-                                              end: Alignment.bottomCenter,
-                                              colors: [
-                                                Color(0xffD6111E),
-                                                Color(0xff970810),
-                                              ],
-                                            ),
-                                          )
-                                              : BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(8),
-                                            color: const Color(0xff484848)
-                                                .withOpacity(0.55),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              Provider.of<ProductsProvider>(
-                                                  context,
-                                                  listen: false)
-                                                  .homeCategoryList_[0]
-                                                  .title!,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selectedCategory = 1;
-                                          });
-                                        },
-                                        child: Container(
-                                          height: 40,
-                                          decoration: selectedCategory == 1
-                                              ? BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(8),
-                                            gradient: const LinearGradient(
-                                              begin: Alignment.topCenter,
-                                              end: Alignment.bottomCenter,
-                                              colors: [
-                                                Color(0xffD6111E),
-                                                Color(0xff970810),
-                                              ],
-                                            ),
-                                          )
-                                              : BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(8),
-                                            color: const Color(0xff484848)
-                                                .withOpacity(0.55),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              Provider.of<ProductsProvider>(
-                                                  context,
-                                                  listen: false)
-                                                  .homeCategoryList_[1]
-                                                  .title!,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selectedCategory = 2;
-                                          });
-                                        },
-                                        child: Container(
-                                          height: 40,
-                                          decoration: selectedCategory == 2
-                                              ? BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(8),
-                                            gradient: const LinearGradient(
-                                              begin: Alignment.topCenter,
-                                              end: Alignment.bottomCenter,
-                                              colors: [
-                                                Color(0xffD6111E),
-                                                Color(0xff970810),
-                                              ],
-                                            ),
-                                          )
-                                              : BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(8),
-                                            color: const Color(0xff484848)
-                                                .withOpacity(0.55),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              Provider.of<ProductsProvider>(
-                                                  context,
-                                                  listen: false)
-                                                  .homeCategoryList_[2]
-                                                  .title!,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
+                                                BorderRadius.circular(8),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 24),
-                                Row(
-                                  children: [
-                                    const Image(
-                                      image: AssetImage('images/red_label.png'),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      selectedCategory == 10
-                                          ? 'الكل'
-                                          : Provider.of<ProductsProvider>(context,
-                                          listen: false)
-                                          .homeCategoryList_[selectedCategory]
-                                          .title!,
-                                      style: const TextStyle(
-                                        color: Color(0xff171717),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => MainScreen(
-                                              pageIndex: 1,
-                                              categoryIndex: selectedCategory,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: selectedCategory != 10
-                                          ? const Text(
-                                        'عرض الكل',
-                                        style: TextStyle(
-                                          color: Color(0xff8C8C8C),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      )
-                                          : const SizedBox.shrink(),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 20),
+                                const SizedBox(height: 70),
                                 GridView.builder(
-                                  itemCount: selectedCategory == 10
-                                      ? Provider.of<ProductsProvider>(context,
-                                      listen: false)
-                                      .allProductsList_
-                                      .length
-                                      : 4,
+                                  itemCount: 4,
                                   shrinkWrap: true,
                                   padding: EdgeInsets.zero,
-                                  physics: const NeverScrollableScrollPhysics(),
                                   gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
                                     childAspectRatio: 160 / 270,
                                     crossAxisSpacing: 16,
                                     mainAxisSpacing: 16,
                                   ),
                                   itemBuilder: (context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ProductScreen(
-                                              homeProduct:
-                                              Provider.of<ProductsProvider>(
-                                                  context,
-                                                  listen: false)
-                                                  .homeCategoryList_[
-                                              selectedCategory == 10
-                                                  ? 0
-                                                  : selectedCategory]
-                                                  .products![index],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: HomePageGridViewItem(
-                                        id: selectedCategory == 10
-                                            ? Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .allProductsList_[index]
-                                            .id
-                                            .toString()
-                                            : Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .homeCategoryList_[
-                                        selectedCategory]
-                                            .products![index]
-                                            .id
-                                            .toString(),
-                                        image: selectedCategory == 10
-                                            ? Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .allProductsList_[index]
-                                            .images![0]
-                                            .image
-                                            .toString()
-                                            : Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .homeCategoryList_[
-                                        selectedCategory]
-                                            .products![index]
-                                            .images![0]
-                                            .image
-                                            .toString(),
-                                        name: selectedCategory == 10
-                                            ? Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .allProductsList_[index]
-                                            .title
-                                            .toString()
-                                            : Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .homeCategoryList_[
-                                        selectedCategory]
-                                            .products![index]
-                                            .title
-                                            .toString(),
-                                        info: selectedCategory == 10
-                                            ? Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .allProductsList_[index]
-                                            .subTitle
-                                            .toString()
-                                            : Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .homeCategoryList_[
-                                        selectedCategory]
-                                            .products![index]
-                                            .subTitle
-                                            .toString(),
-                                        price: selectedCategory == 10
-                                            ? Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .allProductsList_[index]
-                                            .price
-                                            .toString()
-                                            : Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .homeCategoryList_[
-                                        selectedCategory]
-                                            .products![index]
-                                            .price
-                                            .toString(),
-                                        description: selectedCategory == 10
-                                            ? Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .allProductsList_[index]
-                                            .description
-                                            .toString()
-                                            : Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .homeCategoryList_[
-                                        selectedCategory]
-                                            .products![index]
-                                            .description
-                                            .toString(),
-                                        isFavorite: selectedCategory == 10
-                                            ? Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .allProductsList_[index]
-                                            .isFav!
-                                            : Provider.of<ProductsProvider>(
-                                            context,
-                                            listen: false)
-                                            .homeCategoryList_[
-                                        selectedCategory]
-                                            .products![index]
-                                            .isFav!,
+                                    return Shimmer(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.grey.shade300,
+                                          Colors.grey.shade50,
+                                          Colors.grey.shade300,
+                                          Colors.grey.shade100,
+                                        ],
+                                      ),
+                                      enabled: true,
+                                      child: Container(
+                                        width: 160,
+                                        // height: 260,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(6),
+                                        ),
                                       ),
                                     );
                                   },

@@ -32,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen>
   String loginWith = 'mobile';
   bool sendButtonClicked = false;
   bool policyChecked = false;
+
   // String code = '';
 
   phone_countries.Country selectedCountry = phone_countries.countries
@@ -48,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen>
         print('appSignature ===> $appSignature');
       });
     });
-    
+
     super.initState();
     mobileEditingController = TextEditingController();
     emailEditingController = TextEditingController();
@@ -68,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen>
     });
     // verifyOtp(code);
   }
+
   // void _listenOtp() async {
   //   print('inside _listenOtp, before');
   //   await SmsAutoFill().listenForCode();
@@ -88,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           SizedBox(
@@ -118,60 +120,70 @@ class _LoginScreenState extends State<LoginScreen>
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(30),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 100),
-                  const Image(image: AssetImage('images/aromalogow.png')),
-                  const SizedBox(height: 85),
-                  RichText(
-                    text: const TextSpan(
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Cairo',
-                      ),
+          CustomScrollView(
+            scrollDirection: Axis.vertical,
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 30,
+                    right: 30,
+                    bottom: 30,
+                    top: 60,
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        TextSpan(
-                          style: TextStyle(color: Color(0xffD6111E)),
-                          text: 'تس',
+                        const SizedBox(height: 70),
+                        const Image(image: AssetImage('images/aromalogow.png')),
+                        const SizedBox(height: 85),
+                        RichText(
+                          text: const TextSpan(
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Cairo',
+                            ),
+                            children: [
+                              TextSpan(
+                                style: TextStyle(color: Color(0xffD6111E)),
+                                text: 'تس',
+                              ),
+                              TextSpan(text: 'جيل الدخول'),
+                            ],
+                          ),
                         ),
-                        TextSpan(text: 'جيل الدخول'),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'بواسطة',
-                    style: TextStyle(
-                      color: Color(0xffBCBCBC),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  const SizedBox(height: 35),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              loginWith = 'mobile';
-                              sendButtonClicked = false;
-                              mobileEditingController.text = '';
-                              emailEditingController.text = '';
-                              otpCodeEditingController.text = '';
-                            });
-                          },
-                          child: Container(
-                            height: 48,
-                            decoration: loginWith == 'mobile'
-                                ? BoxDecoration(
+                        const SizedBox(height: 10),
+                        const Text(
+                          'بواسطة',
+                          style: TextStyle(
+                            color: Color(0xffBCBCBC),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(height: 35),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    loginWith = 'mobile';
+                                    sendButtonClicked = false;
+                                    mobileEditingController.text = '';
+                                    emailEditingController.text = '';
+                                    otpCodeEditingController.text = '';
+                                  });
+                                },
+                                child: Container(
+                                  height: 48,
+                                  decoration: loginWith == 'mobile'
+                                      ? BoxDecoration(
                                     borderRadius: BorderRadius.circular(21),
                                     gradient: const LinearGradient(
                                       begin: Alignment.topCenter,
@@ -182,40 +194,40 @@ class _LoginScreenState extends State<LoginScreen>
                                       ],
                                     ),
                                   )
-                                : BoxDecoration(
+                                      : BoxDecoration(
                                     borderRadius: BorderRadius.circular(21),
                                     color: const Color(0xff7B7B81)
                                         .withOpacity(0.5750),
                                   ),
-                            child: const Center(
-                              child: Text(
-                                'رقم الجوال',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                  child: const Center(
+                                    child: Text(
+                                      'رقم الجوال',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              loginWith = 'email';
-                              sendButtonClicked = false;
-                              mobileEditingController.text = '';
-                              emailEditingController.text = '';
-                              otpCodeEditingController.text = '';
-                            });
-                          },
-                          child: Container(
-                            height: 48,
-                            decoration: loginWith == 'email'
-                                ? BoxDecoration(
+                            const SizedBox(width: 20),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    loginWith = 'email';
+                                    sendButtonClicked = false;
+                                    mobileEditingController.text = '';
+                                    emailEditingController.text = '';
+                                    otpCodeEditingController.text = '';
+                                  });
+                                },
+                                child: Container(
+                                  height: 48,
+                                  decoration: loginWith == 'email'
+                                      ? BoxDecoration(
                                     borderRadius: BorderRadius.circular(21),
                                     gradient: const LinearGradient(
                                       begin: Alignment.topCenter,
@@ -226,31 +238,31 @@ class _LoginScreenState extends State<LoginScreen>
                                       ],
                                     ),
                                   )
-                                : BoxDecoration(
+                                      : BoxDecoration(
                                     borderRadius: BorderRadius.circular(21),
                                     color: const Color(0xff7B7B81)
                                         .withOpacity(0.5750),
                                   ),
-                            child: const Center(
-                              child: Text(
-                                'البريد الالكتروني',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                  child: const Center(
+                                    child: Text(
+                                      'البريد الالكتروني',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    height: 48,
-                    child: loginWith == 'mobile'
-                        ? TextField(
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          height: 48,
+                          child: loginWith == 'mobile'
+                              ? TextField(
                             controller: mobileEditingController,
                             cursorHeight: 5,
                             showCursor: false,
@@ -258,8 +270,8 @@ class _LoginScreenState extends State<LoginScreen>
                             decoration: InputDecoration(
                               suffixIconColor: Colors.grey,
                               suffixIcon: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10),
                                 child: InkWell(
                                   onTap: () {
                                     if (showCountriesList == false) {
@@ -350,22 +362,22 @@ class _LoginScreenState extends State<LoginScreen>
                                 fontWeight: FontWeight.normal,
                               ),
                               contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              const EdgeInsets.symmetric(horizontal: 20),
                               filled: true,
                               fillColor: Colors.white,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22),
-                                borderSide:
-                                    const BorderSide(color: Colors.transparent),
+                                borderSide: const BorderSide(
+                                    color: Colors.transparent),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22),
-                                borderSide:
-                                    const BorderSide(color: Colors.transparent),
+                                borderSide: const BorderSide(
+                                    color: Colors.transparent),
                               ),
                             ),
                           )
-                        : TextField(
+                              : TextField(
                             controller: emailEditingController,
                             cursorHeight: 5,
                             showCursor: false,
@@ -378,27 +390,27 @@ class _LoginScreenState extends State<LoginScreen>
                                 fontWeight: FontWeight.normal,
                               ),
                               contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              const EdgeInsets.symmetric(horizontal: 20),
                               filled: true,
                               fillColor: Colors.white,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22),
-                                borderSide:
-                                    const BorderSide(color: Colors.transparent),
+                                borderSide: const BorderSide(
+                                    color: Colors.transparent),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(22),
-                                borderSide:
-                                    const BorderSide(color: Colors.transparent),
+                                borderSide: const BorderSide(
+                                    color: Colors.transparent),
                               ),
                             ),
                           ),
-                  ),
-                  sendButtonClicked
-                      ? const SizedBox(height: 20)
-                      : const SizedBox.shrink(),
-                  sendButtonClicked
-                      ? TextField(
+                        ),
+                        sendButtonClicked
+                            ? const SizedBox(height: 20)
+                            : const SizedBox.shrink(),
+                        sendButtonClicked
+                            ? TextField(
                           controller: otpCodeEditingController,
                           cursorHeight: 5,
                           showCursor: false,
@@ -414,27 +426,27 @@ class _LoginScreenState extends State<LoginScreen>
                               fontWeight: FontWeight.normal,
                             ),
                             contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 20),
+                            const EdgeInsets.symmetric(horizontal: 20),
                             filled: true,
                             fillColor: Colors.white,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(22),
                               borderSide:
-                                  const BorderSide(color: Colors.transparent),
+                              const BorderSide(color: Colors.transparent),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(22),
                               borderSide:
-                                  const BorderSide(color: Colors.transparent),
+                              const BorderSide(color: Colors.transparent),
                             ),
                           ),
                         )
-                      : const SizedBox.shrink(),
-                  sendButtonClicked
-                      ? const SizedBox(height: 12)
-                      : const SizedBox.shrink(),
-                  sendButtonClicked
-                      ? Row(
+                            : const SizedBox.shrink(),
+                        sendButtonClicked
+                            ? const SizedBox(height: 12)
+                            : const SizedBox.shrink(),
+                        sendButtonClicked
+                            ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Checkbox(
@@ -447,10 +459,10 @@ class _LoginScreenState extends State<LoginScreen>
                               activeColor: const Color(0xffD6111E),
                               checkColor: const Color(0xffD6111E),
                               side: MaterialStateBorderSide.resolveWith(
-                                  (states) =>
-                                      const BorderSide(color: Colors.white)),
+                                      (states) =>
+                                  const BorderSide(color: Colors.white)),
                               materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
+                              MaterialTapTargetSize.shrinkWrap,
                             ),
                             const SizedBox(width: 8),
                             Expanded(
@@ -465,7 +477,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   children: [
                                     const TextSpan(
                                         text:
-                                            'عند تسجيل الدخول ، أنت توافق على '),
+                                        'عند تسجيل الدخول ، أنت توافق على '),
                                     TextSpan(
                                       text: 'الشروط والأحكام ',
                                       style: const TextStyle(
@@ -489,10 +501,10 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ],
                         )
-                      : const SizedBox.shrink(),
-                  const SizedBox(height: 20),
-                  !sendButtonClicked
-                      ? InkWell(
+                            : const SizedBox.shrink(),
+                        const SizedBox(height: 20),
+                        !sendButtonClicked
+                            ? InkWell(
                           onTap: () async {
                             await performSend();
                           },
@@ -521,7 +533,7 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ),
                         )
-                      : InkWell(
+                            : InkWell(
                           onTap: () async {
                             await performLogin();
                           },
@@ -550,11 +562,11 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ),
                         ),
-                  sendButtonClicked
-                      ? const SizedBox(height: 30)
-                      : const SizedBox.shrink(),
-                  sendButtonClicked
-                      ? InkWell(
+                        sendButtonClicked
+                            ? const SizedBox(height: 30)
+                            : const SizedBox.shrink(),
+                        sendButtonClicked
+                            ? InkWell(
                           onTap: () {},
                           child: const Text(
                             'اعادة ارسال الكود',
@@ -565,10 +577,14 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ),
                         )
-                      : const SizedBox.shrink(),
-                ],
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
+            ],
+
           ),
           showCountriesList == true
               ? PositionedDirectional(

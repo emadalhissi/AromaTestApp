@@ -1,6 +1,7 @@
 import 'package:aroma_test_app/API/Controllers/favorites_api_controller.dart';
 import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_product.dart';
 import 'package:aroma_test_app/widgets/product_screen_feedback_container.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,9 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+
+  double favoriteScale = 1;
+
   String rate() {
     if (widget.homeProduct.rateAvg != null) {
       String rateBefore = widget.homeProduct.rateAvg!;
@@ -96,7 +100,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(8),
                           image: DecorationImage(
-                            image: NetworkImage(image.image!),
+                            image: CachedNetworkImageProvider(image.image!),
                             fit: BoxFit.cover,
                           ),
                         ),

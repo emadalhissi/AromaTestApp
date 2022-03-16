@@ -13,7 +13,9 @@ enum SPKeys {
   address,
   notifications,
   theme,
-  token
+  token,
+  sliderDownloaded,
+  categoriesDownloaded,
 }
 
 class SharedPreferencesController {
@@ -36,13 +38,16 @@ class SharedPreferencesController {
     await _sharedPrefLibObj.setString(SPKeys.language.toString(), language);
   }
 
-  String get checkLanguage => _sharedPrefLibObj.getString(SPKeys.language.toString()) ?? 'ar';
+  String get checkLanguage =>
+      _sharedPrefLibObj.getString(SPKeys.language.toString()) ?? 'ar';
 
   Future<void> setToken({required String token}) async {
-    await _sharedPrefLibObj.setString(SPKeys.token.toString(), 'Bearer ' + token);
+    await _sharedPrefLibObj.setString(
+        SPKeys.token.toString(), 'Bearer ' + token);
   }
 
-  String get getToken => _sharedPrefLibObj.getString(SPKeys.token.toString()) ?? '';
+  String get getToken =>
+      _sharedPrefLibObj.getString(SPKeys.token.toString()) ?? '';
 
   Future<void> setFirstVisit() async {
     await _sharedPrefLibObj.setBool(SPKeys.firstVisit.toString(), false);
@@ -100,6 +105,23 @@ class SharedPreferencesController {
     await _sharedPrefLibObj.setString(
         SPKeys.dateOfBirth.toString(), dateOfBirth);
   }
+
+  Future<void> setSliderDownloaded({required bool downloaded}) async {
+    await _sharedPrefLibObj.setBool(
+        SPKeys.sliderDownloaded.toString(), downloaded);
+  }
+
+  bool get getSliderDownloaded =>
+      _sharedPrefLibObj.getBool(SPKeys.sliderDownloaded.toString()) ?? false;
+
+  Future<void> setCategoriesDownloaded({required bool downloaded}) async {
+    await _sharedPrefLibObj.setBool(
+        SPKeys.categoriesDownloaded.toString(), downloaded);
+  }
+
+  bool get getCategoriesDownloaded =>
+      _sharedPrefLibObj.getBool(SPKeys.categoriesDownloaded.toString()) ??
+      false;
 
   Future<bool> logout() async {
     return await _sharedPrefLibObj.setBool(SPKeys.loggedIn.toString(), false);

@@ -88,6 +88,8 @@ class _LaunchScreenState extends State<LaunchScreen> {
       Provider.of<SplashProvider>(context, listen: false)
           .setPagesList_(list: pages);
     }
+    SharedPreferencesController().setSliderDownloaded(downloaded: false);
+    SharedPreferencesController().setCategoriesDownloaded(downloaded: false);
     print('END SPLASH');
   }
 

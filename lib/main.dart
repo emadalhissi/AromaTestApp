@@ -1,5 +1,6 @@
 import 'package:aroma_test_app/DB/db_provider.dart';
 import 'package:aroma_test_app/Providers/lang_provider.dart';
+import 'package:aroma_test_app/Providers/products_provider.dart';
 import 'package:aroma_test_app/Providers/splash_provider.dart';
 import 'package:aroma_test_app/screens/auth/login_screen.dart';
 import 'package:aroma_test_app/screens/intro_screen.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +39,9 @@ class _MyAppState extends State<MyApp> {
           ),
           ChangeNotifierProvider<SplashProvider>(
             create: (context) => SplashProvider(),
+          ),
+          ChangeNotifierProvider<ProductsProvider>(
+            create: (context) => ProductsProvider(),
           ),
         ],
         child: const MyMaterialApp(),

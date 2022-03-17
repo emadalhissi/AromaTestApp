@@ -1,6 +1,8 @@
 import 'package:aroma_test_app/API/Controllers/home_response_controller.dart';
+import 'package:aroma_test_app/Providers/favorites_provider.dart';
 import 'package:aroma_test_app/Providers/products_provider.dart';
 import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_category.dart';
+import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_product.dart';
 import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_slider.dart';
 import 'package:aroma_test_app/screens/main_screen.dart';
 import 'package:aroma_test_app/screens/product_screen.dart';
@@ -620,8 +622,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         itemBuilder: (context, index) {
                                           return InkWell(
                                             onTap: () {
-                                              Navigator.push(
-                                                context,
+                                              print('check');
+                                              Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       ProductScreen(
@@ -637,134 +639,166 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         .products![index],
                                                   ),
                                                 ),
-                                              );
+                                              ).then((_) => setState(() {}));
                                             },
-                                            child: OpenContainerWrapper(
-                                              transitionType: _transitionType,
-                                              closedBuilder: (context, openContainer) {
-                                                return HomePageGridViewItem(
-                                                  id: selectedCategory == 10
-                                                      ? Provider.of<
-                                                      ProductsProvider>(
+                                            child: HomePageGridViewItem(
+                                              favoriteProduct: ()  {
+                                                favoriteProduct(
+                                                  selectedCategory == 10
+                                                      ? Provider.of<ProductsProvider>(
                                                       context,
-                                                      listen: false)
+                                                      listen: false
+                                                  )
                                                       .allProductsList_[index]
-                                                      .id
-                                                      .toString()
-                                                      : Provider.of<
-                                                      ProductsProvider>(
+                                                      : Provider.of<ProductsProvider>(
                                                       context,
-                                                      listen: false)
+                                                      listen: false
+                                                  )
                                                       .homeCategoryList_[
                                                   selectedCategory]
-                                                      .products![index]
-                                                      .id
-                                                      .toString(),
-                                                  image: selectedCategory == 10
-                                                      ? Provider.of<
-                                                      ProductsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                      .allProductsList_[index]
-                                                      .images![0]
-                                                      .image
-                                                      .toString()
-                                                      : Provider.of<
-                                                      ProductsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                      .homeCategoryList_[
-                                                  selectedCategory]
-                                                      .products![index]
-                                                      .images![0]
-                                                      .image
-                                                      .toString(),
-                                                  name: selectedCategory == 10
-                                                      ? Provider.of<
-                                                      ProductsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                      .allProductsList_[index]
-                                                      .title
-                                                      .toString()
-                                                      : Provider.of<
-                                                      ProductsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                      .homeCategoryList_[
-                                                  selectedCategory]
-                                                      .products![index]
-                                                      .title
-                                                      .toString(),
-                                                  info: selectedCategory == 10
-                                                      ? Provider.of<
-                                                      ProductsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                      .allProductsList_[index]
-                                                      .subTitle
-                                                      .toString()
-                                                      : Provider.of<
-                                                      ProductsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                      .homeCategoryList_[
-                                                  selectedCategory]
-                                                      .products![index]
-                                                      .subTitle
-                                                      .toString(),
-                                                  price: selectedCategory == 10
-                                                      ? Provider.of<
-                                                      ProductsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                      .allProductsList_[index]
-                                                      .price
-                                                      .toString()
-                                                      : Provider.of<
-                                                      ProductsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                      .homeCategoryList_[
-                                                  selectedCategory]
-                                                      .products![index]
-                                                      .price
-                                                      .toString(),
-                                                  description: selectedCategory ==
-                                                      10
-                                                      ? Provider.of<
-                                                      ProductsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                      .allProductsList_[index]
-                                                      .description
-                                                      .toString()
-                                                      : Provider.of<
-                                                      ProductsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                      .homeCategoryList_[
-                                                  selectedCategory]
-                                                      .products![index]
-                                                      .description
-                                                      .toString(),
-                                                  isFavorite: selectedCategory == 10
-                                                      ? Provider.of<
-                                                      ProductsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                      .allProductsList_[index]
-                                                      .isFav!
-                                                      : Provider.of<
-                                                      ProductsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                      .homeCategoryList_[
-                                                  selectedCategory]
-                                                      .products![index]
-                                                      .isFav!,
+                                                      .products![index],
                                                 );
                                               },
+                                              homeProduct: selectedCategory ==
+                                                  10
+                                                  ? Provider.of<ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .allProductsList_[
+                                              index]
+                                                  : Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .homeCategoryList_[
+                                              selectedCategory]
+                                                  .products![index],
+                                              id: selectedCategory == 10
+                                                  ? Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .allProductsList_[
+                                              index]
+                                                  .id
+                                                  .toString()
+                                                  : Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .homeCategoryList_[
+                                              selectedCategory]
+                                                  .products![index]
+                                                  .id
+                                                  .toString(),
+                                              image: selectedCategory == 10
+                                                  ? Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .allProductsList_[
+                                              index]
+                                                  .images![0]
+                                                  .image
+                                                  .toString()
+                                                  : Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .homeCategoryList_[
+                                              selectedCategory]
+                                                  .products![index]
+                                                  .images![0]
+                                                  .image
+                                                  .toString(),
+                                              name: selectedCategory == 10
+                                                  ? Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .allProductsList_[
+                                              index]
+                                                  .title
+                                                  .toString()
+                                                  : Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .homeCategoryList_[
+                                              selectedCategory]
+                                                  .products![index]
+                                                  .title
+                                                  .toString(),
+                                              info: selectedCategory == 10
+                                                  ? Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .allProductsList_[
+                                              index]
+                                                  .subTitle
+                                                  .toString()
+                                                  : Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .homeCategoryList_[
+                                              selectedCategory]
+                                                  .products![index]
+                                                  .subTitle
+                                                  .toString(),
+                                              price: selectedCategory == 10
+                                                  ? Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .allProductsList_[
+                                              index]
+                                                  .price
+                                                  .toString()
+                                                  : Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .homeCategoryList_[
+                                              selectedCategory]
+                                                  .products![index]
+                                                  .price
+                                                  .toString(),
+                                              description: selectedCategory ==
+                                                  10
+                                                  ? Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .allProductsList_[
+                                              index]
+                                                  .description
+                                                  .toString()
+                                                  : Provider.of<
+                                                  ProductsProvider>(
+                                                  context,
+                                                  listen: false)
+                                                  .homeCategoryList_[
+                                              selectedCategory]
+                                                  .products![index]
+                                                  .description
+                                                  .toString(),
+                                              isFavorite: selectedCategory ==
+                                                  10
+                                                  ? Provider.of<
+                                                  ProductsProvider>(
+                                                  context)
+                                                  .allProductsList_[
+                                              index]
+                                                  .isFav!
+                                                  : Provider.of<
+                                                  ProductsProvider>(
+                                                  context)
+                                                  .homeCategoryList_[
+                                              selectedCategory]
+                                                  .products![index]
+                                                  .isFav!,
                                             ),
                                           );
                                         },
@@ -1049,8 +1083,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: () {
-                                        Navigator.push(
-                                          context,
+                                        Navigator.of(context).push(
+
                                           MaterialPageRoute(
                                             builder: (context) => ProductScreen(
                                               homeProduct: Provider.of<
@@ -1064,121 +1098,140 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .products![index],
                                             ),
                                           ),
-                                        );
+                                        ).then((_) => setState(() {}));
                                       },
-                                      child: OpenContainerWrapper(
-                                        transitionType: _transitionType,
-                                        closedBuilder: (context, openContainer) {
-                                          print('closedBuilder--');
-                                          return HomePageGridViewItem(
-                                            id: selectedCategory == 10
+                                      child: HomePageGridViewItem(
+                                        favoriteProduct: ()  {
+                                          favoriteProduct(
+                                            selectedCategory == 10
                                                 ? Provider.of<ProductsProvider>(
                                                 context,
-                                                listen: false)
+                                                listen: false
+                                            )
                                                 .allProductsList_[index]
-                                                .id
-                                                .toString()
                                                 : Provider.of<ProductsProvider>(
                                                 context,
-                                                listen: false)
+                                                listen: false
+                                            )
                                                 .homeCategoryList_[
                                             selectedCategory]
-                                                .products![index]
-                                                .id
-                                                .toString(),
-                                            image: selectedCategory == 10
-                                                ? Provider.of<ProductsProvider>(
-                                                context,
-                                                listen: false)
-                                                .allProductsList_[index]
-                                                .images![0]
-                                                .image
-                                                .toString()
-                                                : Provider.of<ProductsProvider>(
-                                                context,
-                                                listen: false)
-                                                .homeCategoryList_[
-                                            selectedCategory]
-                                                .products![index]
-                                                .images![0]
-                                                .image
-                                                .toString(),
-                                            name: selectedCategory == 10
-                                                ? Provider.of<ProductsProvider>(
-                                                context,
-                                                listen: false)
-                                                .allProductsList_[index]
-                                                .title
-                                                .toString()
-                                                : Provider.of<ProductsProvider>(
-                                                context,
-                                                listen: false)
-                                                .homeCategoryList_[
-                                            selectedCategory]
-                                                .products![index]
-                                                .title
-                                                .toString(),
-                                            info: selectedCategory == 10
-                                                ? Provider.of<ProductsProvider>(
-                                                context,
-                                                listen: false)
-                                                .allProductsList_[index]
-                                                .subTitle
-                                                .toString()
-                                                : Provider.of<ProductsProvider>(
-                                                context,
-                                                listen: false)
-                                                .homeCategoryList_[
-                                            selectedCategory]
-                                                .products![index]
-                                                .subTitle
-                                                .toString(),
-                                            price: selectedCategory == 10
-                                                ? Provider.of<ProductsProvider>(
-                                                context,
-                                                listen: false)
-                                                .allProductsList_[index]
-                                                .price
-                                                .toString()
-                                                : Provider.of<ProductsProvider>(
-                                                context,
-                                                listen: false)
-                                                .homeCategoryList_[
-                                            selectedCategory]
-                                                .products![index]
-                                                .price
-                                                .toString(),
-                                            description: selectedCategory == 10
-                                                ? Provider.of<ProductsProvider>(
-                                                context,
-                                                listen: false)
-                                                .allProductsList_[index]
-                                                .description
-                                                .toString()
-                                                : Provider.of<ProductsProvider>(
-                                                context,
-                                                listen: false)
-                                                .homeCategoryList_[
-                                            selectedCategory]
-                                                .products![index]
-                                                .description
-                                                .toString(),
-                                            isFavorite: selectedCategory == 10
-                                                ? Provider.of<ProductsProvider>(
-                                                context,
-                                                listen: false)
-                                                .allProductsList_[index]
-                                                .isFav!
-                                                : Provider.of<ProductsProvider>(
-                                                context,
-                                                listen: false)
-                                                .homeCategoryList_[
-                                            selectedCategory]
-                                                .products![index]
-                                                .isFav!,
+                                                .products![index],
                                           );
                                         },
-
+                                        homeProduct: selectedCategory == 10
+                                            ? Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .allProductsList_[index]
+                                            : Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .homeCategoryList_[
+                                        selectedCategory]
+                                            .products![index],
+                                        id: selectedCategory == 10
+                                            ? Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .allProductsList_[index]
+                                            .id
+                                            .toString()
+                                            : Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .homeCategoryList_[
+                                        selectedCategory]
+                                            .products![index]
+                                            .id
+                                            .toString(),
+                                        image: selectedCategory == 10
+                                            ? Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .allProductsList_[index]
+                                            .images![0]
+                                            .image
+                                            .toString()
+                                            : Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .homeCategoryList_[
+                                        selectedCategory]
+                                            .products![index]
+                                            .images![0]
+                                            .image
+                                            .toString(),
+                                        name: selectedCategory == 10
+                                            ? Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .allProductsList_[index]
+                                            .title
+                                            .toString()
+                                            : Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .homeCategoryList_[
+                                        selectedCategory]
+                                            .products![index]
+                                            .title
+                                            .toString(),
+                                        info: selectedCategory == 10
+                                            ? Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .allProductsList_[index]
+                                            .subTitle
+                                            .toString()
+                                            : Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .homeCategoryList_[
+                                        selectedCategory]
+                                            .products![index]
+                                            .subTitle
+                                            .toString(),
+                                        price: selectedCategory == 10
+                                            ? Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .allProductsList_[index]
+                                            .price
+                                            .toString()
+                                            : Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .homeCategoryList_[
+                                        selectedCategory]
+                                            .products![index]
+                                            .price
+                                            .toString(),
+                                        description: selectedCategory == 10
+                                            ? Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .allProductsList_[index]
+                                            .description
+                                            .toString()
+                                            : Provider.of<ProductsProvider>(
+                                            context,
+                                            listen: false)
+                                            .homeCategoryList_[
+                                        selectedCategory]
+                                            .products![index]
+                                            .description
+                                            .toString(),
+                                        isFavorite: selectedCategory == 10
+                                            ? Provider.of<ProductsProvider>(
+                                            context)
+                                            .allProductsList_[index]
+                                            .isFav!
+                                            : Provider.of<ProductsProvider>(
+                                            context)
+                                            .homeCategoryList_[
+                                        selectedCategory]
+                                            .products![index]
+                                            .isFav!,
                                       ),
                                     );
                                   },
@@ -1195,6 +1248,14 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+
+  Future<void> favoriteProduct(HomeProduct homeProduct) async {
+    bool status = await Provider.of<FavoritesProvider>(context, listen: false).updateFavorite(
+      context: context,
+      product: homeProduct,
+    );
+    print('status from home grid view=> $status');
+    setState(() {});
+    print('after set state');
+  }
 }
-
-

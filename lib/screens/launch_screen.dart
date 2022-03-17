@@ -2,6 +2,7 @@ import 'package:aroma_test_app/API/Controllers/auth_api_controller.dart';
 import 'package:aroma_test_app/API/Controllers/splash_controller.dart';
 import 'package:aroma_test_app/DB/controllers/splash_cities_db_controller.dart';
 import 'package:aroma_test_app/DB/controllers/splash_countries_db_controller.dart';
+import 'package:aroma_test_app/Providers/favorites_provider.dart';
 import 'package:aroma_test_app/Providers/splash_provider.dart';
 import 'package:aroma_test_app/models/API%20Models/Splash/splash_data.dart';
 import 'package:aroma_test_app/screens/auth/login_screen.dart';
@@ -10,6 +11,7 @@ import 'package:aroma_test_app/shared_preferences/shared_preferences_controller.
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class LaunchScreen extends StatefulWidget {
   const LaunchScreen({Key? key}) : super(key: key);
@@ -18,12 +20,13 @@ class LaunchScreen extends StatefulWidget {
   _LaunchScreenState createState() => _LaunchScreenState();
 }
 
-class _LaunchScreenState extends State<LaunchScreen> with TickerProviderStateMixin{
+class _LaunchScreenState extends State<LaunchScreen>
+    with TickerProviderStateMixin {
   final SplashCountriesDbController splashCountriesDbController =
       SplashCountriesDbController();
   final SplashCitiesDbController splashCitiesDbController =
       SplashCitiesDbController();
-late Animation animation;
+  late Animation animation;
   late AnimationController animationController;
 
   @override
@@ -37,7 +40,6 @@ late Animation animation;
       lowerBound: 0.1,
     );
 
-    // animation = Tween(begin: 0.8, end: 1.0).animate(animationController);
     animation = Tween(begin: -1.0, end: 0.0).animate(
       CurvedAnimation(
         parent: animationController,
@@ -57,13 +59,12 @@ late Animation animation;
     animationController.forward();
   }
 
- 
-
- @override
+  @override
   void dispose() {
     animationController.dispose();
     super.dispose();
   }
+
   Future<void> register() async {
     bool status = await AuthApiController().register(context);
 
@@ -156,15 +157,33 @@ late Animation animation;
             color: const Color(0xff970810).withOpacity(0.50),
           ),
           Center(
-            child: FadeTransition(
-              opacity:
-                  animationController.drive(CurveTween(curve: Curves.easeOut)),
+            child: Shimmer(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.transparent,
+                  Colors.white,
+                  Colors.transparent,
+                  Colors.white,
+                ],
+              ),
+              loop: 0,
+              enabled: true,
               child: Image(
                 image: AssetImage('images/aroma_logo_.png'),
                 height: 80,
               ),
             ),
           ),
+          // Center(
+          //   child: FadeTransition(
+          //     opacity:
+          //         animationController.drive(CurveTween(curve: Curves.easeOut)),
+          //     child: Image(
+          //       image: AssetImage('images/aroma_logo_.png'),
+          //       height: 80,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

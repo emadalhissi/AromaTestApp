@@ -1,9 +1,11 @@
 import 'package:aroma_test_app/API/Controllers/favorites_api_controller.dart';
+import 'package:aroma_test_app/Providers/favorites_provider.dart';
 import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_product.dart';
 import 'package:aroma_test_app/widgets/product_screen_feedback_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductScreen extends StatefulWidget {
   final HomeProduct homeProduct;
@@ -18,7 +20,6 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-
   double favoriteScale = 1;
 
   String rate() {
@@ -31,6 +32,7 @@ class _ProductScreenState extends State<ProductScreen> {
     }
     return '0';
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +156,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       ),
                       InkWell(
                         onTap: () async {
-                          await favorite();
+                          await favoriteProduct(widget.homeProduct);
                         },
                         child: Container(
                           width: 50,
@@ -375,14 +377,12 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  Future<void> favorite() async {
-    bool status = await FavoritesApiController().favorite(
-      context,
-      id: widget.homeProduct.id.toString(),
+  Future<void> favoriteProduct(HomeProduct homeProduct) async {
+    bool status = await Provider.of<FavoritesProvider>(context, listen: false).updateFavorite(
+      context: context,
+      product: homeProduct,
     );
-
-    if (status) {
-      setState(() {});
-    }
+    print('status from product screen=> $status');
+    setState(() {});
   }
 }

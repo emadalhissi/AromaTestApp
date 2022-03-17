@@ -1,4 +1,5 @@
 import 'package:aroma_test_app/DB/db_provider.dart';
+import 'package:aroma_test_app/Providers/favorites_provider.dart';
 import 'package:aroma_test_app/Providers/lang_provider.dart';
 import 'package:aroma_test_app/Providers/products_provider.dart';
 import 'package:aroma_test_app/Providers/splash_provider.dart';
@@ -42,6 +43,9 @@ class _MyAppState extends State<MyApp> {
           ),
           ChangeNotifierProvider<ProductsProvider>(
             create: (context) => ProductsProvider(),
+          ),
+          ChangeNotifierProvider<FavoritesProvider>(
+            create: (context) => FavoritesProvider(),
           ),
         ],
         child: const MyMaterialApp(),

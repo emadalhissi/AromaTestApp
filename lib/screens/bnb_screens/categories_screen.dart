@@ -1,7 +1,9 @@
 import 'package:animations/animations.dart';
 import 'package:aroma_test_app/API/Controllers/home_response_controller.dart';
+import 'package:aroma_test_app/Providers/favorites_provider.dart';
 import 'package:aroma_test_app/Providers/products_provider.dart';
 import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_category.dart';
+import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_product.dart';
 import 'package:aroma_test_app/screens/product_screen.dart';
 import 'package:aroma_test_app/widgets/home_page_grid_view_item.dart';
 import 'package:aroma_test_app/widgets/open_container.dart';
@@ -21,7 +23,7 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  late Future<List<HomeCategory>> futureHomeCategoryList;
+  // late Future<List<HomeCategory>> futureHomeCategoryList;
 
   late int selectedCategory = widget.categoryIndex;
 
@@ -31,8 +33,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   void initState() {
     super.initState();
-    futureHomeCategoryList =
-        HomeResponseController().showHomeCategories(context);
+    // futureHomeCategoryList =
+    //     HomeResponseController().showHomeCategories(context);
   }
 
   @override
@@ -310,8 +312,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-                              Navigator.push(
-                                context,
+                              Navigator.of(context).push(
+
                                 MaterialPageRoute(
                                   builder: (context) => ProductScreen(
                                     homeProduct: Provider.of<ProductsProvider>(
@@ -324,12 +326,37 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                         .products![index],
                                   ),
                                 ),
-                              );
+                              ).then((_) => setState(() {}));
                             },
                             child: OpenContainerWrapper(
                               transitionType: _transitionType,
                               closedBuilder: (context, action) {
                                 return HomePageGridViewItem(
+                                  favoriteProduct: () {
+                                     favoriteProduct(
+                                      selectedCategory == 10
+                                          ? Provider.of<ProductsProvider>(
+                                        context,
+                                          listen: false
+                                      )
+                                          .allProductsList_[index]
+                                          : Provider.of<ProductsProvider>(
+                                        context,
+                                          listen: false
+                                      )
+                                          .homeCategoryList_[
+                                      selectedCategory]
+                                          .products![index],
+                                    );
+                                  },
+                                  homeProduct: selectedCategory == 10
+                                      ? Provider.of<ProductsProvider>(context,
+                                              listen: false)
+                                          .allProductsList_[index]
+                                      : Provider.of<ProductsProvider>(context,
+                                              listen: false)
+                                          .homeCategoryList_[selectedCategory]
+                                          .products![index],
                                   id: selectedCategory == 10
                                       ? Provider.of<ProductsProvider>(context,
                                               listen: false)
@@ -405,12 +432,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                           .description
                                           .toString(),
                                   isFavorite: selectedCategory == 10
-                                      ? Provider.of<ProductsProvider>(context,
-                                              listen: false)
+                                      ? Provider.of<ProductsProvider>(context)
                                           .allProductsList_[index]
                                           .isFav!
-                                      : Provider.of<ProductsProvider>(context,
-                                              listen: false)
+                                      : Provider.of<ProductsProvider>(context)
                                           .homeCategoryList_[selectedCategory]
                                           .products![index]
                                           .isFav!,
@@ -429,5 +454,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         );
       },
     );
+  }
+  Future<void> favoriteProduct(HomeProduct homeProduct) async {
+    bool status = await Provider.of<FavoritesProvider>(context, listen: false).updateFavorite(
+      context: context,
+      product: homeProduct,
+    );
+    setState(() {});
   }
 }

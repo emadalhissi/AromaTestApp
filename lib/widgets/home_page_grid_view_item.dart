@@ -1,8 +1,12 @@
 import 'package:aroma_test_app/API/Controllers/favorites_api_controller.dart';
+import 'package:aroma_test_app/Providers/favorites_provider.dart';
+import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_product.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePageGridViewItem extends StatefulWidget {
+  final HomeProduct homeProduct;
   final String id;
   final String image;
   final String name;
@@ -10,9 +14,10 @@ class HomePageGridViewItem extends StatefulWidget {
   final String price;
   final String description;
   final bool isFavorite;
-
+  final void Function() favoriteProduct;
 
   const HomePageGridViewItem({
+    required this.homeProduct,
     required this.id,
     required this.image,
     required this.name,
@@ -20,6 +25,7 @@ class HomePageGridViewItem extends StatefulWidget {
     required this.price,
     required this.description,
     required this.isFavorite,
+    required this.favoriteProduct,
     Key? key,
   }) : super(key: key);
 
@@ -124,9 +130,7 @@ class _HomePageGridViewItemState extends State<HomePageGridViewItem> {
           Padding(
             padding: const EdgeInsets.all(10),
             child: InkWell(
-              onTap: () async {
-                await favorite();
-              },
+              onTap: widget.favoriteProduct,
               child: CircleAvatar(
                 radius: 18,
                 backgroundColor: const Color(0xffC3C3C3),
@@ -144,16 +148,5 @@ class _HomePageGridViewItemState extends State<HomePageGridViewItem> {
         ],
       ),
     );
-  }
-
-  Future<void> favorite() async {
-    bool status = await FavoritesApiController().favorite(
-      context,
-      id: widget.id,
-    );
-
-    if (status) {
-      setState(() {});
-    }
   }
 }

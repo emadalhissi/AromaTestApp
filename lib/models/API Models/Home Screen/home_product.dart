@@ -18,23 +18,23 @@ class HomeProduct {
   late List<HomeImage>? images;
   late int? isShipping;
 
-  // HomeProduct({
-  //   required this.id,
-  //   required this.title,
-  //   required this.subTitle,
-  //   required this.description,
-  //   required this.price,
-  //   required this.isFav,
-  //   required this.isRate,
-  //   required this.rateAvg,
-  //   required this.rates,
-  //   required this.remainingQty,
-  //   required this.hasOption,
-  //   required this.optionName,
-  //   required this.optionPrice,
-  //   required this.images,
-  //   required this.isShipping,
-  // });
+  HomeProduct({
+    // required this.id,
+    required this.title,
+    // required this.subTitle,
+    // required this.description,
+    // required this.price,
+    // required this.isFav,
+    // required this.isRate,
+    // required this.rateAvg,
+    // required this.rates,
+    // required this.remainingQty,
+    // required this.hasOption,
+    // required this.optionName,
+    // required this.optionPrice,
+    // required this.images,
+    // required this.isShipping,
+  });
 
   HomeProduct.fromJson(Map<String, dynamic> json) {
     id = json['id'];

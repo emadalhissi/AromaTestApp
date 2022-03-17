@@ -16,6 +16,7 @@ enum SPKeys {
   token,
   sliderDownloaded,
   categoriesDownloaded,
+  appSignature,
 }
 
 class SharedPreferencesController {
@@ -71,6 +72,16 @@ class SharedPreferencesController {
 
   String get getUserName =>
       _sharedPrefLibObj.getString(SPKeys.userName.toString()) ?? '';
+
+  Future<void> setAppSignature({
+    required String appSignature,
+  }) async {
+    await _sharedPrefLibObj.setString(
+        SPKeys.appSignature.toString(), appSignature);
+  }
+
+  String get getAppSignature =>
+      _sharedPrefLibObj.getString(SPKeys.appSignature.toString()) ?? '';
 
   Future<void> saveEmail({
     required String email,

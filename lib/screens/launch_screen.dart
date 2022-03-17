@@ -12,6 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:getwidget/getwidget.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LaunchScreen extends StatefulWidget {
   const LaunchScreen({Key? key}) : super(key: key);
@@ -28,10 +31,16 @@ class _LaunchScreenState extends State<LaunchScreen>
       SplashCitiesDbController();
   late Animation animation;
   late AnimationController animationController;
+  bool loading = false;
 
   @override
   void initState() {
     super.initState();
+    Future.delayed(const Duration(seconds: 1), () {
+     setState(() {
+        loading = true;
+     });
+    });
     register();
     animationController = AnimationController(
       duration: const Duration(milliseconds: 1500),
@@ -157,23 +166,46 @@ class _LaunchScreenState extends State<LaunchScreen>
             color: const Color(0xff970810).withOpacity(0.50),
           ),
           Center(
-            child: Shimmer(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.transparent,
-                  Colors.white,
-                  Colors.transparent,
-                  Colors.white,
-                ],
-              ),
-              loop: 0,
-              enabled: true,
-              child: Image(
-                image: AssetImage('images/aroma_logo_.png'),
-                height: 80,
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Image(
+                  image: AssetImage('images/aroma_logo_.png'),
+                  height: 80,
+                ),
+                const SizedBox(height: 50),
+                loading == true
+                    ? const SizedBox(
+                        height: 50,
+                        child: LoadingIndicator(
+                            indicatorType: Indicator.lineSpinFadeLoader,
+                            colors: [Colors.white],
+                            strokeWidth: 0.1,
+                            backgroundColor: Colors.transparent,
+                            pathBackgroundColor: Colors.black),
+                      )
+                    : const SizedBox(height: 50),
+              ],
             ),
           ),
+          // const Center(
+          //   child: Shimmer(
+          //     gradient: LinearGradient(
+          //       colors: [
+          //         Colors.transparent,
+          //         Colors.white,
+          //         Colors.transparent,
+          //         Colors.white,
+          //       ],
+          //     ),
+          //     loop: 0,
+          //     enabled: true,
+          //     child: Image(
+          //       image: AssetImage('images/aroma_logo_.png'),
+          //       height: 80,
+          //     ),
+          //   ),
+          // ),
           // Center(
           //   child: FadeTransition(
           //     opacity:

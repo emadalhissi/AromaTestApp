@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
 
-class NewWidget extends StatelessWidget implements PreferredSizeWidget {
-  const NewWidget({
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final Widget? leading;
+  const MyAppBar({
     Key? key,
+    this.leading,
   }) : super(key: key);
 
+  
+
   @override
-  Size get preferredSize => new Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +66,7 @@ class NewWidget extends StatelessWidget implements PreferredSizeWidget {
         ),
         const SizedBox(width: 5)
       ],
-      leading: IconButton(
-        onPressed: () {},
-        icon: const Icon(Icons.search, size: 30),
-      ),
+      leading: leading,
     );
   }
 }

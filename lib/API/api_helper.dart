@@ -13,6 +13,7 @@ mixin ApiHelper {
       'X-Client-Device-Type': '123456device_type55',
       'X-Client-Device-UDID': 'asdasdasdasdasdasdas',
       'Authorization': SharedPreferencesController().getToken,
+      'X-Client-Device-Message-uid': SharedPreferencesController().getAppSignature,
     };
     // if(SharedPreferencesController().loggedIn) {
     // headers['Authorization'] = SharedPreferencesController().getToken;

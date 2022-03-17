@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:aroma_test_app/API/Controllers/auth_api_controller.dart';
 import 'package:aroma_test_app/Helpers/snakbar.dart';
+import 'package:aroma_test_app/Providers/favorites_provider.dart';
 import 'package:aroma_test_app/Providers/splash_provider.dart';
 import 'package:aroma_test_app/models/API%20Models/Activate/activate_base.dart';
 import 'package:aroma_test_app/models/API%20Models/Register%20User/register_user.dart';
@@ -15,7 +16,6 @@ import 'package:provider/provider.dart';
 import 'package:intl_phone_field/countries.dart' as phone_countries;
 import 'package:sms_autofill/sms_autofill.dart';
 // import 'package:page_transition/page_transition.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -44,11 +44,12 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   void initState() {
-    listenForCode();
+    SmsAutoFill().listenForCode();
     SmsAutoFill().getAppSignature.then((signature) {
       setState(() {
         final appSignature = signature;
         print('appSignature ===> $appSignature');
+        SharedPreferencesController().setAppSignature(appSignature: signature);
       });
     });
 
@@ -85,6 +86,7 @@ class _LoginScreenState extends State<LoginScreen>
     emailEditingController.dispose();
     otpCodeEditingController.dispose();
     searchEditingController.dispose();
+    cancel();
     SmsAutoFill().unregisterListener();
     super.dispose();
   }
@@ -186,21 +188,23 @@ class _LoginScreenState extends State<LoginScreen>
                                   height: 48,
                                   decoration: loginWith == 'mobile'
                                       ? BoxDecoration(
-                                    borderRadius: BorderRadius.circular(21),
-                                    gradient: const LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Color(0xffD6111E),
-                                        Color(0xff970810),
-                                      ],
-                                    ),
-                                  )
+                                          borderRadius:
+                                              BorderRadius.circular(21),
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Color(0xffD6111E),
+                                              Color(0xff970810),
+                                            ],
+                                          ),
+                                        )
                                       : BoxDecoration(
-                                    borderRadius: BorderRadius.circular(21),
-                                    color: const Color(0xff7B7B81)
-                                        .withOpacity(0.5750),
-                                  ),
+                                          borderRadius:
+                                              BorderRadius.circular(21),
+                                          color: const Color(0xff7B7B81)
+                                              .withOpacity(0.5750),
+                                        ),
                                   child: const Center(
                                     child: Text(
                                       'رقم الجوال',
@@ -230,21 +234,23 @@ class _LoginScreenState extends State<LoginScreen>
                                   height: 48,
                                   decoration: loginWith == 'email'
                                       ? BoxDecoration(
-                                    borderRadius: BorderRadius.circular(21),
-                                    gradient: const LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Color(0xffD6111E),
-                                        Color(0xff970810),
-                                      ],
-                                    ),
-                                  )
+                                          borderRadius:
+                                              BorderRadius.circular(21),
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Color(0xffD6111E),
+                                              Color(0xff970810),
+                                            ],
+                                          ),
+                                        )
                                       : BoxDecoration(
-                                    borderRadius: BorderRadius.circular(21),
-                                    color: const Color(0xff7B7B81)
-                                        .withOpacity(0.5750),
-                                  ),
+                                          borderRadius:
+                                              BorderRadius.circular(21),
+                                          color: const Color(0xff7B7B81)
+                                              .withOpacity(0.5750),
+                                        ),
                                   child: const Center(
                                     child: Text(
                                       'البريد الالكتروني',
@@ -265,320 +271,322 @@ class _LoginScreenState extends State<LoginScreen>
                           height: 48,
                           child: loginWith == 'mobile'
                               ? TextField(
-                            controller: mobileEditingController,
-                            cursorHeight: 5,
-                            showCursor: false,
-                            keyboardType: TextInputType.phone,
-                            decoration: InputDecoration(
-                              suffixIconColor: Colors.grey,
-                              suffixIcon: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10),
-                                child: InkWell(
-                                  onTap: () {
-                                    if (showCountriesList == false) {
-                                      setState(() {
-                                        showCountriesList = true;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        showCountriesList = false;
-                                      });
-                                    }
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Colors.grey,
+                                  controller: mobileEditingController,
+                                  cursorHeight: 5,
+                                  showCursor: false,
+                                  keyboardType: TextInputType.phone,
+                                  decoration: InputDecoration(
+                                    suffixIconColor: Colors.grey,
+                                    suffixIcon: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: InkWell(
+                                        onTap: () {
+                                          if (showCountriesList == false) {
+                                            setState(() {
+                                              showCountriesList = true;
+                                            });
+                                          } else {
+                                            setState(() {
+                                              showCountriesList = false;
+                                            });
+                                          }
+                                        },
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Icon(
+                                              Icons.arrow_drop_down,
+                                              color: Colors.grey,
+                                            ),
+                                            Text(selectedCountry.dialCode),
+                                            const Text('+'),
+                                            const SizedBox(width: 8),
+                                            Image.asset(
+                                              'assets/flags/${selectedCountry.code.toLowerCase()}.png',
+                                              package: 'intl_phone_field',
+                                              width: 32,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      Text(selectedCountry.dialCode),
-                                      const Text('+'),
-                                      const SizedBox(width: 8),
-                                      Image.asset(
-                                        'assets/flags/${selectedCountry.code.toLowerCase()}.png',
-                                        package: 'intl_phone_field',
-                                        width: 32,
-                                      ),
-                                    ],
+                                    ),
+                                    // suffixIcon: DropdownButton<String>(
+                                    //   underline: const SizedBox.shrink(),
+                                    //   alignment: Alignment.centerLeft,
+                                    //   value: dropdownButtonDialCode,
+                                    //   onChanged: (String? newValue) {
+                                    //     setState(() {
+                                    //       dropdownButtonDialCode = newValue!;
+                                    //     });
+                                    //     print(dropdownButtonDialCode);
+                                    //   },
+                                    //   items:
+                                    //       phone_countries.countries.map((country_) {
+                                    //     return DropdownMenuItem(
+                                    //       onTap: (){
+                                    //         setState(() {
+                                    //           dropdownButtonFlag = country_.code;
+                                    //         });
+                                    //       },
+                                    //       child: Row(
+                                    //         mainAxisAlignment: MainAxisAlignment.end,
+                                    //         children: [
+                                    //           Text(country_.dialCode),
+                                    //           const Text('+'),
+                                    //           const SizedBox(width: 8),
+                                    //           Image.asset(
+                                    //             'assets/flags/${country_.code.toLowerCase()}.png',
+                                    //             package: 'intl_phone_field',
+                                    //             width: 32,
+                                    //           ),
+                                    //         ],
+                                    //       ),
+                                    //       value: country_.dialCode,
+                                    //     );
+                                    //   }).toList(),
+                                    // ),
+                                    // prefixIcon: DropdownButton<String>(
+                                    //   value: dropdownButtonValue,
+                                    //   onChanged: (String? newValue) {
+                                    //     setState(() {
+                                    //       dropdownButtonValue = newValue!;
+                                    //     });
+                                    //   },
+                                    //   items: Provider.of<SplashProvider>(context,
+                                    //           listen: false)
+                                    //       .countryCodes_
+                                    //       .map((countryCode) {
+                                    //     return DropdownMenuItem(
+                                    //       child: Text('+${countryCode.prefix!}'),
+                                    //       value: countryCode.prefix,
+                                    //     );
+                                    //   }).toList(),
+                                    // ),
+                                    hintText: 'رقم الجوال',
+                                    hintStyle: const TextStyle(
+                                      color: Color(0xff8C8C8C),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(22),
+                                      borderSide: const BorderSide(
+                                          color: Colors.transparent),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(22),
+                                      borderSide: const BorderSide(
+                                          color: Colors.transparent),
+                                    ),
+                                  ),
+                                )
+                              : TextField(
+                                  controller: emailEditingController,
+                                  cursorHeight: 5,
+                                  showCursor: false,
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: InputDecoration(
+                                    hintText: 'البريد الالكتروني',
+                                    hintStyle: const TextStyle(
+                                      color: Color(0xff8C8C8C),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(22),
+                                      borderSide: const BorderSide(
+                                          color: Colors.transparent),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(22),
+                                      borderSide: const BorderSide(
+                                          color: Colors.transparent),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              // suffixIcon: DropdownButton<String>(
-                              //   underline: const SizedBox.shrink(),
-                              //   alignment: Alignment.centerLeft,
-                              //   value: dropdownButtonDialCode,
-                              //   onChanged: (String? newValue) {
-                              //     setState(() {
-                              //       dropdownButtonDialCode = newValue!;
-                              //     });
-                              //     print(dropdownButtonDialCode);
-                              //   },
-                              //   items:
-                              //       phone_countries.countries.map((country_) {
-                              //     return DropdownMenuItem(
-                              //       onTap: (){
-                              //         setState(() {
-                              //           dropdownButtonFlag = country_.code;
-                              //         });
-                              //       },
-                              //       child: Row(
-                              //         mainAxisAlignment: MainAxisAlignment.end,
-                              //         children: [
-                              //           Text(country_.dialCode),
-                              //           const Text('+'),
-                              //           const SizedBox(width: 8),
-                              //           Image.asset(
-                              //             'assets/flags/${country_.code.toLowerCase()}.png',
-                              //             package: 'intl_phone_field',
-                              //             width: 32,
-                              //           ),
-                              //         ],
-                              //       ),
-                              //       value: country_.dialCode,
-                              //     );
-                              //   }).toList(),
-                              // ),
-                              // prefixIcon: DropdownButton<String>(
-                              //   value: dropdownButtonValue,
-                              //   onChanged: (String? newValue) {
-                              //     setState(() {
-                              //       dropdownButtonValue = newValue!;
-                              //     });
-                              //   },
-                              //   items: Provider.of<SplashProvider>(context,
-                              //           listen: false)
-                              //       .countryCodes_
-                              //       .map((countryCode) {
-                              //     return DropdownMenuItem(
-                              //       child: Text('+${countryCode.prefix!}'),
-                              //       value: countryCode.prefix,
-                              //     );
-                              //   }).toList(),
-                              // ),
-                              hintText: 'رقم الجوال',
-                              hintStyle: const TextStyle(
-                                color: Color(0xff8C8C8C),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                              contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 20),
-                              filled: true,
-                              fillColor: Colors.white,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(22),
-                                borderSide: const BorderSide(
-                                    color: Colors.transparent),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(22),
-                                borderSide: const BorderSide(
-                                    color: Colors.transparent),
-                              ),
-                            ),
-                          )
-                              : TextField(
-                            controller: emailEditingController,
-                            cursorHeight: 5,
-                            showCursor: false,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                              hintText: 'البريد الالكتروني',
-                              hintStyle: const TextStyle(
-                                color: Color(0xff8C8C8C),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                              contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 20),
-                              filled: true,
-                              fillColor: Colors.white,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(22),
-                                borderSide: const BorderSide(
-                                    color: Colors.transparent),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(22),
-                                borderSide: const BorderSide(
-                                    color: Colors.transparent),
-                              ),
-                            ),
-                          ),
                         ),
                         sendButtonClicked
                             ? const SizedBox(height: 20)
                             : const SizedBox.shrink(),
                         sendButtonClicked
-                            ? TextField(
-                          controller: otpCodeEditingController,
-                          cursorHeight: 5,
-                          showCursor: false,
-                          keyboardType: TextInputType.number,
+                            ? TextFieldPinAutoFill(
+                                // controller: otpCodeEditingController,
+                                // cursorHeight: 5,
+                                // showCursor: false,
+                                // keyboardType: TextInputType.number,
 
-                          // codeLength: 1,
-                          // currentCode: code,
-                          decoration: InputDecoration(
-                            hintText: 'كود التحقق',
-                            hintStyle: const TextStyle(
-                              color: Color(0xff8C8C8C),
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                            ),
-                            contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 20),
-                            filled: true,
-                            fillColor: Colors.white,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(22),
-                              borderSide:
-                              const BorderSide(color: Colors.transparent),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(22),
-                              borderSide:
-                              const BorderSide(color: Colors.transparent),
-                            ),
-                          ),
-                        )
+                                codeLength: 6,
+                                currentCode: code,
+
+                                decoration: InputDecoration(
+                                  counter: const SizedBox.shrink(),
+                                  hintText: 'كود التحقق',
+                                  hintStyle: const TextStyle(
+                                    color: Color(0xff8C8C8C),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(22),
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(22),
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent),
+                                  ),
+                                ),
+                              )
                             : const SizedBox.shrink(),
                         sendButtonClicked
                             ? const SizedBox(height: 12)
                             : const SizedBox.shrink(),
                         sendButtonClicked
                             ? Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Checkbox(
-                              value: policyChecked,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  policyChecked = newValue!;
-                                });
-                              },
-                              activeColor: const Color(0xffD6111E),
-                              checkColor: const Color(0xffD6111E),
-                              side: MaterialStateBorderSide.resolveWith(
-                                      (states) =>
-                                  const BorderSide(color: Colors.white)),
-                              materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Cairo',
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Checkbox(
+                                    value: policyChecked,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        policyChecked = newValue!;
+                                      });
+                                    },
+                                    activeColor: const Color(0xffD6111E),
+                                    checkColor: const Color(0xffD6111E),
+                                    side: MaterialStateBorderSide.resolveWith(
+                                        (states) => const BorderSide(
+                                            color: Colors.white)),
+                                    materialTapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
                                   ),
-                                  children: [
-                                    const TextSpan(
-                                        text:
-                                        'عند تسجيل الدخول ، أنت توافق على '),
-                                    TextSpan(
-                                      text: 'الشروط والأحكام ',
-                                      style: const TextStyle(
-                                          color: Color(0xffD6111E)),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          print('الشروط والأحكام ');
-                                        },
-                                    ),
-                                    const TextSpan(text: 'و '),
-                                    TextSpan(
-                                        text: 'سياسة الخصوصية',
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: RichText(
+                                      text: TextSpan(
                                         style: const TextStyle(
-                                            color: Color(0xffD6111E)),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap =
-                                              () => print('سياسة الخصوصية')),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Cairo',
+                                        ),
+                                        children: [
+                                          const TextSpan(
+                                              text:
+                                                  'عند تسجيل الدخول ، أنت توافق على '),
+                                          TextSpan(
+                                            text: 'الشروط والأحكام ',
+                                            style: const TextStyle(
+                                                color: Color(0xffD6111E)),
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () {
+                                                print('الشروط والأحكام ');
+                                              },
+                                          ),
+                                          const TextSpan(text: 'و '),
+                                          TextSpan(
+                                              text: 'سياسة الخصوصية',
+                                              style: const TextStyle(
+                                                  color: Color(0xffD6111E)),
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () =>
+                                                    print('سياسة الخصوصية')),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
                             : const SizedBox.shrink(),
                         const SizedBox(height: 20),
                         !sendButtonClicked
                             ? InkWell(
-                          onTap: () async {
-                            await performSend();
-                          },
-                          child: Container(
-                            height: 48,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(21),
-                              gradient: const LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Color(0xffD6111E),
-                                  Color(0xff970810),
-                                ],
-                              ),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'ارسال',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
+                                onTap: () async {
+                                  await performSend();
+                                },
+                                child: Container(
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(21),
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color(0xffD6111E),
+                                        Color(0xff970810),
+                                      ],
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'ارسال',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-                        )
+                              )
                             : InkWell(
-                          onTap: () async {
-                            await performLogin();
-                          },
-                          child: Container(
-                            height: 48,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(21),
-                              gradient: const LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Color(0xffD6111E),
-                                  Color(0xff970810),
-                                ],
-                              ),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'تسجيل الدخول',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
+                                onTap: () async {
+                                  await performLogin();
+                                },
+                                child: Container(
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(21),
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color(0xffD6111E),
+                                        Color(0xff970810),
+                                      ],
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'تسجيل الدخول',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
                         sendButtonClicked
                             ? const SizedBox(height: 30)
                             : const SizedBox.shrink(),
                         sendButtonClicked
                             ? InkWell(
-                          onTap: () {},
-                          child: const Text(
-                            'اعادة ارسال الكود',
-                            style: TextStyle(
-                              color: Color(0xff8C8C8C),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        )
+                                onTap: () {},
+                                child: const Text(
+                                  'اعادة ارسال الكود',
+                                  style: TextStyle(
+                                    color: Color(0xff8C8C8C),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              )
                             : const SizedBox.shrink(),
                       ],
                     ),
@@ -586,7 +594,6 @@ class _LoginScreenState extends State<LoginScreen>
                 ),
               ),
             ],
-
           ),
           showCountriesList == true
               ? PositionedDirectional(
@@ -722,7 +729,15 @@ class _LoginScreenState extends State<LoginScreen>
   Future<void> performLogin() async {
     if (checkDataAfter()) {
       await checkOTP();
+
     }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MainScreen(),
+      ),
+    );
   }
 
   Future<void> sendMobile() async {
@@ -751,18 +766,16 @@ class _LoginScreenState extends State<LoginScreen>
   Future<void> checkOTP() async {
     ActivateBase? activateBase = await AuthApiController().activate(
       context,
-      code: otpCodeEditingController.text,
+      code: code!,
+      // code: otpCodeEditingController.text,
     );
+
     if (activateBase != null) {
       SharedPreferencesController()
           .setToken(token: activateBase.activateData!.token!);
+
       SharedPreferencesController().saveLoggedIn();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MainScreen(),
-        ),
-      );
+ Provider.of<FavoritesProvider>(context, listen: false).getFavorites_();
       // PageRouteBuilder(
       //                 transitionsBuilder:
       //                     (context, animation, secondaryAnimation, child) {
@@ -811,11 +824,11 @@ class _LoginScreenState extends State<LoginScreen>
 
   bool checkDataAfter() {
     if (checkDataBefore() && otpCodeEditingController.text.isEmpty) {
-      showSnackBar(
-        context,
-        message: 'يرجى ادخال كود التحقق',
-        error: true,
-      );
+      // showSnackBar(
+      //   context,
+      //   message: 'يرجى ادخال كود التحقق',
+      //   error: true,
+      // );
       return false;
     } else if (policyChecked == false) {
       showSnackBar(

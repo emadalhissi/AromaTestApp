@@ -13,94 +13,7 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 60,
-        flexibleSpace: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerRight,
-                  end: Alignment.centerLeft,
-                  colors: [
-                    Color(0xff970810),
-                    Color(0xffBB0D16),
-                  ],
-                ),
-              ),
-            ),
-            const Positioned(
-              left: 82,
-              top: 25,
-              child: Image(
-                image: AssetImage('images/a_c_1.png'),
-                height: 90,
-                width: 90,
-              ),
-            ),
-            const Positioned(
-              left: 140,
-              top: -8,
-              child: Image(
-                image: AssetImage('images/a_c_2.png'),
-                height: 90,
-                width: 90,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Image(
-                image: AssetImage('images/support.png'),
-              )),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_outlined, size: 25),
-          ),
-          const SizedBox(width: 5)
-        ],
-        title: Row(
-          children: [
-            Container(
-              width: 22,
-              height: 22,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(color: Colors.white),
-              ),
-              child: Checkbox(
-                value: selectAllCheckBox,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectAllCheckBox = newValue!;
-                  });
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                checkColor: Colors.white,
-                activeColor: Colors.transparent,
-                side: MaterialStateBorderSide.resolveWith(
-                    (states) => const BorderSide(color: Colors.transparent)),
-                // materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-            ),
-            const SizedBox(width: 10),
-            const Text(
-              'تحديد الكل',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: Stack(
+    return Stack(
         children: [
           SingleChildScrollView(
             child: Padding(
@@ -389,7 +302,93 @@ class _CartScreenState extends State<CartScreen> {
             ],
           ),
         ],
-      ),
-    );
+      );
   }
 }
+
+// appBar: AppBar(
+//         toolbarHeight: 60,
+//         flexibleSpace: Stack(
+//           children: [
+//             Container(
+//               decoration: const BoxDecoration(
+//                 gradient: LinearGradient(
+//                   begin: Alignment.centerRight,
+//                   end: Alignment.centerLeft,
+//                   colors: [
+//                     Color(0xff970810),
+//                     Color(0xffBB0D16),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//             const Positioned(
+//               left: 82,
+//               top: 25,
+//               child: Image(
+//                 image: AssetImage('images/a_c_1.png'),
+//                 height: 90,
+//                 width: 90,
+//               ),
+//             ),
+//             const Positioned(
+//               left: 140,
+//               top: -8,
+//               child: Image(
+//                 image: AssetImage('images/a_c_2.png'),
+//                 height: 90,
+//                 width: 90,
+//               ),
+//             ),
+//           ],
+//         ),
+//         actions: [
+//           IconButton(
+//               onPressed: () {},
+//               icon: const Image(
+//                 image: AssetImage('images/support.png'),
+//               )),
+//           IconButton(
+//             onPressed: () {},
+//             icon: const Icon(Icons.notifications_outlined, size: 25),
+//           ),
+//           const SizedBox(width: 5)
+//         ],
+//         title: Row(
+//           children: [
+//             Container(
+//               width: 22,
+//               height: 22,
+//               decoration: BoxDecoration(
+//                 borderRadius: BorderRadius.circular(50),
+//                 border: Border.all(color: Colors.white),
+//               ),
+//               child: Checkbox(
+//                 value: selectAllCheckBox,
+//                 onChanged: (newValue) {
+//                   setState(() {
+//                     selectAllCheckBox = newValue!;
+//                   });
+//                 },
+//                 shape: RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(50),
+//                 ),
+//                 checkColor: Colors.white,
+//                 activeColor: Colors.transparent,
+//                 side: MaterialStateBorderSide.resolveWith(
+//                     (states) => const BorderSide(color: Colors.transparent)),
+//                 // materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+//               ),
+//             ),
+//             const SizedBox(width: 10),
+//             const Text(
+//               'تحديد الكل',
+//               style: TextStyle(
+//                 color: Colors.white,
+//                 fontSize: 12,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),

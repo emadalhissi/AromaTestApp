@@ -5,11 +5,7 @@ class CartDataModel {
   late int? total;
   late List<CartProduct>? cartProduct;
 
-  // CartDataModel({
-  //   required this.id,
-  //   required this.total,
-  //   required this.cartProduct,
-  // });
+  CartDataModel();
 
   CartDataModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

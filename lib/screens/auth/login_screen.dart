@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:aroma_test_app/API/Controllers/auth_api_controller.dart';
 import 'package:aroma_test_app/Helpers/snakbar.dart';
+import 'package:aroma_test_app/Providers/cart_provider.dart';
 import 'package:aroma_test_app/Providers/favorites_provider.dart';
 import 'package:aroma_test_app/Providers/splash_provider.dart';
 import 'package:aroma_test_app/models/API%20Models/Activate/activate_base.dart';
@@ -729,7 +730,6 @@ class _LoginScreenState extends State<LoginScreen>
   Future<void> performLogin() async {
     if (checkDataAfter()) {
       await checkOTP();
-
     }
 
     Navigator.pushReplacement(
@@ -775,7 +775,8 @@ class _LoginScreenState extends State<LoginScreen>
           .setToken(token: activateBase.activateData!.token!);
 
       SharedPreferencesController().saveLoggedIn();
- Provider.of<FavoritesProvider>(context, listen: false).getFavorites_();
+      Provider.of<FavoritesProvider>(context, listen: false).getFavorites_();
+      Provider.of<CartProvider>(context, listen: false).getCart_();
       // PageRouteBuilder(
       //                 transitionsBuilder:
       //                     (context, animation, secondaryAnimation, child) {

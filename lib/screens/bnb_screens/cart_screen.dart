@@ -1,5 +1,7 @@
+import 'package:aroma_test_app/Providers/cart_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -14,295 +16,296 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-        children: [
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 30,
-                right: 20,
-                left: 20,
-                bottom: 0,
-              ),
-              child: ListView(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Container(
-                      width: double.infinity,
-                      // height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 0.5,
-                            blurRadius: 1.5,
-                            offset: const Offset(0, 0.5),
-                          ),
-                        ],
-                        color: Colors.white,
-                      ),
-                      child: Stack(
-                        children: [
-                          PositionedDirectional(
-                            end: 10,
-                            top: 10,
-                            child: InkWell(
-                              onTap: () {},
-                              child: const Icon(Icons.clear),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.only(
-                              top: 12,
-                              bottom: 12,
-                              end: 10,
-                              start: 8,
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 22,
-                                  height: 22,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    border: Border.all(color: Color(0xff8C8C8C)),
-                                  ),
-                                  child: Checkbox(
-                                    value: selectAllCheckBox,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        selectAllCheckBox = newValue!;
-                                      });
-                                    },
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    checkColor: Color(0xff8C8C8C),
-                                    activeColor: Colors.transparent,
-                                    side: MaterialStateBorderSide.resolveWith(
-                                        (states) => const BorderSide(
-                                            color: Colors.transparent)),
-                                    // materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                SizedBox(
-                                  width: 110,
-                                  height: 110,
-                                  child: ClipRRect(
-                                    clipBehavior: Clip.antiAlias,
-                                    borderRadius: BorderRadius.circular(6),
-                                    child: const Image(
-                                      image: AssetImage('images/app1.png'),
-                                      fit: BoxFit.cover
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'اشتراك اروما 3 شهور',
-                                        style: TextStyle(
-                                          color: Color(0xff171717),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                        // maxLines: 1,
-                                        // overflow: TextOverflow.ellipsis,
-                                      ),
-                                      SizedBox(height: 5),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            '70',
-                                            style: TextStyle(
-                                              color: Color(0xffD6111E),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 17,
-                                            ),
-                                          ),
-                                          SizedBox(width: 3),
-                                          Text(
-                                            'ر.س',
-                                            style: TextStyle(
-                                              color: Color(0xffD6111E),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 5),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            width: 28,
-                                            height: 28,
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xffBCBCBC)
-                                                  .withOpacity(0.45),
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.add,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 25),
-                                          Text(
-                                            '1',
-                                            style: TextStyle(
-                                              color: Color(0xff646363),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          SizedBox(width: 25),
-                                          Container(
-                                            width: 28,
-                                            height: 28,
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xffBCBCBC)
-                                                  .withOpacity(0.45),
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.remove,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(width: 15),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+      children: [
+        SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: 30,
+              right: 20,
+              left: 20,
+              bottom: 0,
+            ),
+            child: ListView.builder(
+              itemCount: Provider.of<CartProvider>(context, listen: false).cart_!.cartProduct!.length,
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Container(
+                    width: double.infinity,
+                    // height: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 0.5,
+                          blurRadius: 1.5,
+                          offset: const Offset(0, 0.5),
+                        ),
+                      ],
+                      color: Colors.white,
                     ),
+                    child: Stack(
+                      children: [
+                        PositionedDirectional(
+                          end: 10,
+                          top: 10,
+                          child: InkWell(
+                            onTap: () {},
+                            child: const Icon(Icons.clear),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(
+                            top: 12,
+                            bottom: 12,
+                            end: 10,
+                            start: 8,
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 22,
+                                height: 22,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(
+                                      color: const Color(0xff8C8C8C)),
+                                ),
+                                child: Checkbox(
+                                  value: selectAllCheckBox,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectAllCheckBox = newValue!;
+                                    });
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  checkColor: const Color(0xff8C8C8C),
+                                  activeColor: Colors.transparent,
+                                  side: MaterialStateBorderSide.resolveWith(
+                                      (states) => const BorderSide(
+                                          color: Colors.transparent)),
+                                  // materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              SizedBox(
+                                width: 110,
+                                height: 110,
+                                child: ClipRRect(
+                                  clipBehavior: Clip.antiAlias,
+                                  borderRadius: BorderRadius.circular(6),
+                                  child: const Image(
+                                      image: AssetImage('images/app1.png'),
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'اشتراك اروما 3 شهور',
+                                      style: TextStyle(
+                                        color: Color(0xff171717),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                      // maxLines: 1,
+                                      // overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Row(
+                                      children: const [
+                                        Text(
+                                          '70',
+                                          style: TextStyle(
+                                            color: Color(0xffD6111E),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                        SizedBox(width: 3),
+                                        Text(
+                                          'ر.س',
+                                          style: TextStyle(
+                                            color: Color(0xffD6111E),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 28,
+                                          height: 28,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xffBCBCBC)
+                                                .withOpacity(0.45),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 25),
+                                        Text(
+                                          '1',
+                                          style: TextStyle(
+                                            color: Color(0xff646363),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        SizedBox(width: 25),
+                                        Container(
+                                          width: 28,
+                                          height: 28,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xffBCBCBC)
+                                                .withOpacity(0.45),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.remove,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 15),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 0.5,
+                    blurRadius: 1.5,
+                    offset: const Offset(0, 0.5),
                   ),
                 ],
               ),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 0.5,
-                      blurRadius: 1.5,
-                      offset: const Offset(0, 0.5),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'الاجمالي',
+                          style: TextStyle(
+                            color: Color(0xff8C8C8C),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                          ),
+                        ),
+                        Row(
+                          children: const [
+                            Text(
+                              '1500',
+                              style: TextStyle(
+                                color: Color(0xffD6111E),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              'ر.س',
+                              style: TextStyle(
+                                color: Color(0xffD6111E),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width / 2 - 20,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        gradient: const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color(0xffD6111E),
+                            Color(0xff970810),
+                          ],
+                        ),
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text(
+                              'دفع',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            Text(
+                              '(2)',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'الاجمالي',
-                            style: TextStyle(
-                              color: Color(0xff8C8C8C),
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12,
-                            ),
-                          ),
-                          Row(
-                            children: const [
-                              Text(
-                                '1500',
-                                style: TextStyle(
-                                  color: Color(0xffD6111E),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              Text(
-                                'ر.س',
-                                style: TextStyle(
-                                  color: Color(0xffD6111E),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Container(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width / 2 - 20,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          gradient: const LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color(0xffD6111E),
-                              Color(0xff970810),
-                            ],
-                          ),
-                        ),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text(
-                                'دفع',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                '(2)',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ),
-            ],
-          ),
-        ],
-      );
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
 

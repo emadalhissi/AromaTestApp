@@ -11,7 +11,7 @@ mixin ApiHelper {
       'Accept-Language': SharedPreferencesController().checkLanguage,
       'X-Client-FCM-Token': '123456fcm_token55',
       'X-Client-Device-Type': '123456device_type55',
-      'X-Client-Device-UDID': 'asdasdasdasdasdasdas',
+      'X-Client-Device-UDID': SharedPreferencesController().getDeviceId,
       'Authorization': SharedPreferencesController().getToken,
       'X-Client-Device-Message-uid': SharedPreferencesController().getAppSignature,
     };

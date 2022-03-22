@@ -280,6 +280,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                           .products![index],
                                     );
                                   },
+                                  addToCart: (){},
                                   homeProduct: selectedCategory == 10
                                       ? Provider.of<ProductsProvider>(context,
                                               listen: false)

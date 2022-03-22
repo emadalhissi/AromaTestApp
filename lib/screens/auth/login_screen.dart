@@ -36,8 +36,6 @@ class _LoginScreenState extends State<LoginScreen>
   bool sendButtonClicked = false;
   bool policyChecked = false;
 
-  // String code = '';
-
   phone_countries.Country selectedCountry = phone_countries.countries
       .firstWhere((element) => element.dialCode == '970');
   bool showCountriesList = false;
@@ -59,27 +57,18 @@ class _LoginScreenState extends State<LoginScreen>
     emailEditingController = TextEditingController();
     otpCodeEditingController = TextEditingController();
     searchEditingController = TextEditingController();
-    // codeUpdated();
-    // _listenOtp();
   }
 
   @override
   void codeUpdated() {
-    // TODO: implement codeUpdated
     setState(() {
-      otpCodeEditingController.text = code!;
-      print('---code---');
-      print(code);
+      if(code != null) {
+        otpCodeEditingController.text = code!;
+        print('--- code != null ---');
+        print(' => $code');
+      }
     });
-    // verifyOtp(code);
   }
-
-  // void _listenOtp() async {
-  //   print('inside _listenOtp, before');
-  //   await SmsAutoFill().listenForCode();
-  //   print('inside _listenOtp, after');
-
-  // }
 
   @override
   void dispose() {
@@ -419,14 +408,14 @@ class _LoginScreenState extends State<LoginScreen>
                             ? const SizedBox(height: 20)
                             : const SizedBox.shrink(),
                         sendButtonClicked
-                            ? TextFieldPinAutoFill(
-                                // controller: otpCodeEditingController,
-                                // cursorHeight: 5,
-                                // showCursor: false,
-                                // keyboardType: TextInputType.number,
+                            ? TextField(
+                                controller: otpCodeEditingController,
+                                cursorHeight: 5,
+                                showCursor: false,
+                                keyboardType: TextInputType.number,
 
-                                codeLength: 6,
-                                currentCode: code,
+                                // codeLength: 6,
+                                // currentCode: code,
 
                                 decoration: InputDecoration(
                                   counter: const SizedBox.shrink(),
@@ -731,13 +720,6 @@ class _LoginScreenState extends State<LoginScreen>
     if (checkDataAfter()) {
       await checkOTP();
     }
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const MainScreen(),
-      ),
-    );
   }
 
   Future<void> sendMobile() async {
@@ -766,39 +748,47 @@ class _LoginScreenState extends State<LoginScreen>
   Future<void> checkOTP() async {
     ActivateBase? activateBase = await AuthApiController().activate(
       context,
-      code: code!,
-      // code: otpCodeEditingController.text,
+      // code: code!,
+      code: otpCodeEditingController.text,
     );
 
-    if (activateBase != null) {
-      SharedPreferencesController()
-          .setToken(token: activateBase.activateData!.token!);
-
-      SharedPreferencesController().saveLoggedIn();
-      Provider.of<FavoritesProvider>(context, listen: false).getFavorites_();
-      Provider.of<CartProvider>(context, listen: false).getCart_();
-      // PageRouteBuilder(
-      //                 transitionsBuilder:
-      //                     (context, animation, secondaryAnimation, child) {
-      //                   return ScaleTransition(
-      //                     alignment: Alignment.center,
-      //                     scale: Tween<double>(begin: 0.1, end: 1).animate(
-      //                       CurvedAnimation(
-      //                         parent: animation,
-      //                         curve: Curves.bounceIn,
-      //                       ),
-      //                     ),
-      //                     child: child,
-      //                   );
-      //                 },
-      //                 transitionDuration: Duration(seconds: 2),
-      //                 pageBuilder: (BuildContext context,
-      //                     Animation<double> animation,
-      //                     Animation<double> secondaryAnimation) {
-      //                   return FinalScreen();
-      //                 },
-      //               ),
-      //             );
+    if(activateBase != null) {
+      if (activateBase.status! == true) {
+        SharedPreferencesController()
+            .setToken(token: activateBase.activateData!.token!);
+        SharedPreferencesController().saveLoggedIn();
+        Provider.of<FavoritesProvider>(context, listen: false).getFavorites_();
+        Provider.of<CartProvider>(context, listen: false).getCart_();
+        print('before navigate to main');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainScreen(),
+          ),
+        );
+        // PageRouteBuilder(
+        //                 transitionsBuilder:
+        //                     (context, animation, secondaryAnimation, child) {
+        //                   return ScaleTransition(
+        //                     alignment: Alignment.center,
+        //                     scale: Tween<double>(begin: 0.1, end: 1).animate(
+        //                       CurvedAnimation(
+        //                         parent: animation,
+        //                         curve: Curves.bounceIn,
+        //                       ),
+        //                     ),
+        //                     child: child,
+        //                   );
+        //                 },
+        //                 transitionDuration: Duration(seconds: 2),
+        //                 pageBuilder: (BuildContext context,
+        //                     Animation<double> animation,
+        //                     Animation<double> secondaryAnimation) {
+        //                   return FinalScreen();
+        //                 },
+        //               ),
+        //             );
+      }
     }
   }
 
@@ -825,11 +815,11 @@ class _LoginScreenState extends State<LoginScreen>
 
   bool checkDataAfter() {
     if (checkDataBefore() && otpCodeEditingController.text.isEmpty) {
-      // showSnackBar(
-      //   context,
-      //   message: 'يرجى ادخال كود التحقق',
-      //   error: true,
-      // );
+      showSnackBar(
+        context,
+        message: 'يرجى ادخال كود التحقق',
+        error: true,
+      );
       return false;
     } else if (policyChecked == false) {
       showSnackBar(

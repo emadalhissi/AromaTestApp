@@ -44,13 +44,8 @@ class FavoritesProvider extends ChangeNotifier {
     return index != -1;
   }
 
-// void addToFavoritesList_({required HomeProduct product}) {
-//   favoritesList_.add(product);
-//   notifyListeners();
-// }
-//
-void delete_() {
-  favoritesList_.removeAt(0);
-  notifyListeners();
-}
+  void delete_() {
+    favoritesList_.removeAt(0);
+    notifyListeners();
+  }
 }

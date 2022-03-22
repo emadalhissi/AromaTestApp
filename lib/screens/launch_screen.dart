@@ -7,6 +7,7 @@ import 'package:aroma_test_app/Providers/splash_provider.dart';
 import 'package:aroma_test_app/models/API%20Models/Splash/splash_data.dart';
 import 'package:aroma_test_app/screens/auth/login_screen.dart';
 import 'package:aroma_test_app/screens/intro_screen.dart';
+import 'package:aroma_test_app/screens/main_screen.dart';
 import 'package:aroma_test_app/shared_preferences/shared_preferences_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +16,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 
 class LaunchScreen extends StatefulWidget {
   const LaunchScreen({Key? key}) : super(key: key);
@@ -37,10 +39,11 @@ class _LaunchScreenState extends State<LaunchScreen>
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 1), () {
-     setState(() {
+      setState(() {
         loading = true;
-     });
+      });
     });
+    getDeviceId();
     register();
     animationController = AnimationController(
       duration: const Duration(milliseconds: 1500),
@@ -68,6 +71,12 @@ class _LaunchScreenState extends State<LaunchScreen>
     animationController.forward();
   }
 
+  Future<void> getDeviceId() async {
+    String? deviceId = await PlatformDeviceId.getDeviceId;
+    print('deviceId ==> $deviceId');
+    SharedPreferencesController().setDeviceId(deviceId: deviceId!);
+  }
+
   @override
   void dispose() {
     animationController.dispose();
@@ -82,6 +91,9 @@ class _LaunchScreenState extends State<LaunchScreen>
       if (SharedPreferencesController().checkFirstVisit == true) {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const IntroScreen()));
+      } else if(SharedPreferencesController().checkLoggedIn == true) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const MainScreen()));
       } else {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const LoginScreen()));

@@ -1,9 +1,6 @@
-import 'package:aroma_test_app/API/Controllers/favorites_api_controller.dart';
-import 'package:aroma_test_app/Providers/favorites_provider.dart';
 import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_product.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomePageGridViewItem extends StatefulWidget {
   final HomeProduct homeProduct;
@@ -15,6 +12,7 @@ class HomePageGridViewItem extends StatefulWidget {
   final String description;
   final bool isFavorite;
   final void Function() favoriteProduct;
+  final void Function() addToCart;
 
   const HomePageGridViewItem({
     required this.homeProduct,
@@ -26,6 +24,7 @@ class HomePageGridViewItem extends StatefulWidget {
     required this.description,
     required this.isFavorite,
     required this.favoriteProduct,
+    required this.addToCart,
     Key? key,
   }) : super(key: key);
 
@@ -115,10 +114,13 @@ class _HomePageGridViewItemState extends State<HomePageGridViewItem> {
                           ),
                         ),
                         const Spacer(),
-                        const Icon(
-                          Icons.shopping_cart_outlined,
-                          color: Color(0xff484848),
-                          size: 30,
+                        InkWell(
+                          onTap: widget.addToCart,
+                          child: const Icon(
+                            Icons.shopping_cart_outlined,
+                            color: Color(0xff484848),
+                            size: 30,
+                          ),
                         ),
                       ],
                     ),

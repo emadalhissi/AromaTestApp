@@ -17,6 +17,7 @@ enum SPKeys {
   sliderDownloaded,
   categoriesDownloaded,
   appSignature,
+  deviceId,
 }
 
 class SharedPreferencesController {
@@ -82,6 +83,15 @@ class SharedPreferencesController {
 
   String get getAppSignature =>
       _sharedPrefLibObj.getString(SPKeys.appSignature.toString()) ?? '';
+
+  Future<void> setDeviceId({
+    required String deviceId,
+  }) async {
+    await _sharedPrefLibObj.setString(SPKeys.deviceId.toString(), deviceId);
+  }
+
+  String get getDeviceId =>
+      _sharedPrefLibObj.getString(SPKeys.deviceId.toString()) ?? '';
 
   Future<void> saveEmail({
     required String email,

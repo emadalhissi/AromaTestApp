@@ -1,6 +1,8 @@
 import 'package:aroma_test_app/API/Controllers/home_response_controller.dart';
+import 'package:aroma_test_app/Providers/cart_provider.dart';
 import 'package:aroma_test_app/Providers/favorites_provider.dart';
 import 'package:aroma_test_app/Providers/products_provider.dart';
+import 'package:aroma_test_app/models/API%20Models/Cart/cart_product.dart';
 import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_category.dart';
 import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_product.dart';
 import 'package:aroma_test_app/models/API%20Models/Home%20Screen/home_slider.dart';
@@ -534,6 +536,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 .products![index],
                                       );
                                     },
+                                    addToCart: (){},
                                     homeProduct: selectedCategory == 10
                                         ? Provider.of<ProductsProvider>(context,
                                                 listen: false)
@@ -921,6 +924,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .products![index],
                                 );
                               },
+                              addToCart: (){
+                                addProductToCart(
+                                  selectedCategory == 10
+                                      ? Provider.of<ProductsProvider>(context,
+                                      listen: false)
+                                      .allProductsList_[index]
+                                      : Provider.of<ProductsProvider>(context,
+                                      listen: false)
+                                      .homeCategoryList_[selectedCategory]
+                                      .products![index],
+                                );
+                              },
                               homeProduct: selectedCategory == 10
                                   ? Provider.of<ProductsProvider>(context,
                                           listen: false)
@@ -1029,7 +1044,15 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       product: homeProduct,
     );
-    print('status from home grid view=> $status');
+    setState(() {});
+  }
+
+  Future<void> addProductToCart(HomeProduct homeProduct) async {
+    bool status =
+        await Provider.of<CartProvider>(context, listen: false).addToCart_(
+      id: homeProduct.id.toString(),
+    );
+    print('status from home grid view (favorite) => $status');
     setState(() {});
     print('after set state');
   }

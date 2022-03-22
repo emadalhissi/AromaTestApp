@@ -74,6 +74,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                             .favoritesList_[index],
                                       );
                                     },
+                                    addToCart: (){},
                                     homeProduct: Provider.of<FavoritesProvider>(
                                             context,
                                             listen: false)

@@ -1,3 +1,4 @@
+import 'package:aroma_test_app/API/Controllers/cart_api_controller.dart';
 import 'package:aroma_test_app/Providers/cart_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,8 @@ class _CartScreenState extends State<CartScreen> {
               bottom: 0,
             ),
             child: ListView.builder(
-              itemCount: Provider.of<CartProvider>(context, listen: false).cart_!.cartProduct!.length,
+              // itemCount: 2,
+              itemCount: Provider.of<CartProvider>(context, listen: false).cart_.length,
               padding: EdgeInsets.zero,
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -259,42 +261,47 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ],
                     ),
-                    Container(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width / 2 - 20,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Color(0xffD6111E),
-                            Color(0xff970810),
-                          ],
+                    InkWell(
+                      onTap: () async {
+                        await CartApiController().addToCard(id: '3', qty: '12');
+                      },
+                      child: Container(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width / 2 - 20,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(0xffD6111E),
+                              Color(0xff970810),
+                            ],
+                          ),
                         ),
-                      ),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text(
-                              'دفع',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text(
+                                'دفع',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 5),
-                            Text(
-                              '(2)',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
+                              SizedBox(width: 5),
+                              Text(
+                                '(2)',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
